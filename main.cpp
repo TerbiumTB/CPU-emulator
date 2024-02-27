@@ -5,7 +5,7 @@
 
 
 int main() {
-    cpu_emulator::stack<std::vector<int>> vec_stack{};
+    generics::stack<std::vector<int>> vec_stack{};
     auto a = std::vector<int>();
     a.push_back(0);
     a.push_back(9);
@@ -14,7 +14,7 @@ int main() {
     std::cout << a.front() << a.back();
     std::cout << vec_stack.top().back();
 
-    cpu_emulator::stack<int> stack{};
+    generics::stack<int> stack{};
 
     for (auto i = 0; i < 34; i++){
         stack.push(i);

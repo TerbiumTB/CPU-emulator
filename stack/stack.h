@@ -3,7 +3,7 @@
 
 #include <utility>
 
-namespace cpu_emulator {
+namespace generics {
     template<typename T>
     class stack {
     private:
@@ -14,6 +14,7 @@ namespace cpu_emulator {
         void resize(int n) {
             T *ptr = new T[n];
             std::copy(stack_, stack_ + capacity_, ptr);
+            delete [] stack_;
             stack_ = ptr;
         }
 
@@ -39,7 +40,12 @@ namespace cpu_emulator {
         }
 
         stack &operator=(const stack &other) {
-            return *this = stack(other);
+            if(other == this){
+                return *this;
+            }
+            this = stack(other);
+
+            return *this;
         }
 
         stack &operator=(stack &&other) noexcept {
