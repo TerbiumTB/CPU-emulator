@@ -28,22 +28,26 @@ namespace generics {
             delete[] stack_;
         }
 
+        //compiler doesn't use this one, though clang-tidy claims it should
+        stack(stack &&other) noexcept: stack_(std::exchange(other.stack_, nullptr)) {
+            capacity_ = other.capacity_;
+            head_ = other.head_;
+        }
+
         stack(const stack &other) : stack_(new T[other.capacity_]) {
             std::copy(other.stack_, other.stack_ + other.capacity_, stack_);
             capacity_ = other.capacity_;
             head_ = other.head_;
         }
 
-        stack(stack &&other) noexcept: stack_(std::exchange(other.stack_, nullptr)) {
-            capacity_ = other.capacity_;
-            head_ = other.head_;
-        }
 
-        stack &operator=(const stack &other) {
-            if(other == this){
+
+        stack& operator=(const stack &other) {
+            if(&other == this){
                 return *this;
             }
-            this = stack(other);
+
+            *this = stack{other};
 
             return *this;
         }
@@ -70,7 +74,9 @@ namespace generics {
             return stack_[head_];
         }
 
-        void push(const T &value) {
+
+
+        void push(T &&value) {
             head_++;
             stack_[head_] = value;
 
@@ -79,7 +85,9 @@ namespace generics {
             }
         }
 
-        void push(T &&value) { push(std::move(value));}
+        void push(const T &value) {
+            push(std::move(T{value}));
+        }
 
         const T &pop() {
             if (empty()) {
