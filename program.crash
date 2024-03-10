@@ -1,0 +1,11 @@
+beg
+	in
+	popr ax
+	in
+	popr bx
+	in
+	popr cx
+
+	pushr ax
+	out
+end
