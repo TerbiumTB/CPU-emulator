@@ -8,8 +8,8 @@
 namespace cpu_emulator {
 //    template<class T>
 //    struct State{
-//        generics::stack<T> stack_;
-//        std::map<std::string, T> registers_ = {
+//        generics::stack<T> stack;
+//        std::map<std::string, T> registers = {
 //                {"ax", T()},
 //                {"bx", T()},
 //                {"cx", T()},
@@ -20,6 +20,7 @@ namespace cpu_emulator {
 //                {"hx", T()},
 //        };
 //    };
+
     enum class Register {
         ax,
         bx,
@@ -30,19 +31,31 @@ namespace cpu_emulator {
         gx,
         hx
     };
+
     struct State {
-        generics::stack<int> stack_;
-        std::map<Register, int> registers_ = {
-                {Register::ax, 0},
-                {Register::bx, 0},
-                {Register::cx, 0},
-                {Register::dx, 0},
-                {Register::ex, 0},
-                {Register::fx, 0},
-                {Register::gx, 0},
-                {Register::hx, 0},
+        generics::stack<int> stack;
+//        std::map<Register, int> registers = {
+//                {Register::ax, 0},
+//                {Register::bx, 0},
+//                {Register::cx, 0},
+//                {Register::dx, 0},
+//                {Register::ex, 0},
+//                {Register::fx, 0},
+//                {Register::gx, 0},
+//                {Register::hx, 0},
+//        };
+        std::map<std::string, int> registers = {
+                {"ax", 0},
+                {"bx", 0},
+                {"cx", 0},
+                {"dx", 0},
+                {"ex", 0},
+                {"fx", 0},
+                {"gx", 0},
+                {"hx", 0},
         };
-        bool run_ = false;
+        bool run = false;
+        int start;
     };
 }
 

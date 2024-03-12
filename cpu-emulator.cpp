@@ -15,12 +15,19 @@ namespace cpu_emulator {
         if (input_file_.fail()) {
             throw std::ios_base::failure("program file doesn't exist");
         }
+//        auto input = std::istream_iterator<std::string>(input_file_);
+//
+//        auto end = std::istream_iterator<std::string>();
+//        while (input != end){
+//            std::cout << *input << std::endl;
+//            input++;
+//        }
 
         auto commands = preprocessor::Preprocessor(input_file_, state_).Process();
 
-//        for(auto command_ : commands){
+        for(auto &command : commands){
 //            if()
-//        }
+        }
     }
 
 }

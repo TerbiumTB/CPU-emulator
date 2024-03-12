@@ -2,26 +2,16 @@
 
 #include <utility>
 
-typedef std::function<void> Command;
-
 namespace cpu_emulator::preprocessor {
     Preprocessor::Preprocessor(std::ifstream & input_file, std::shared_ptr<State> & state) :
              parser_(input_file), state_(state) {}
 
     std::vector<std::unique_ptr<commands::ICommand>> Preprocessor::Process() {
-
-        std::cout << state_->run_;
-        commands_.push_back(std::make_unique<commands::Begin>(commands::Begin(state_)));
-//        auto c = parser_.ParseCommand();
-//                ->setState(state_)
-//                .setArgs()
-//                .build();
         commands_.push_back(parser_.ParseCommand()
                 ->setState(state_)
                 .setArgs()
                 .build());
         commands_.back()->DoIt();
-        std::cout << state_->run_;
 
 
 //        a->DoIt();
@@ -55,6 +45,7 @@ namespace cpu_emulator::preprocessor {
 //        }
 //        return commands_;
 //return *commands_;
+
 return {};
     }
 }

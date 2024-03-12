@@ -14,22 +14,18 @@
 
 
 namespace cpu_emulator::parser {
-
-//    typedef std::function<void()> DoCommand;
-
+    typedef std::istream_iterator<std::string> file_iterator;
     template<class Command>
     concept TemplateCommand = std::is_base_of<commands::ICommand, Command>::value;
 
-
     class ICommandBuilder {
     protected:
-//std::regex command_regex_;
         std::shared_ptr<State> state_;
+        std::shared_ptr<file_iterator> input_;
     public:
-//        explicit ICommandBuilder(const std::regex &);
         ICommandBuilder() = default;
+        explicit ICommandBuilder(std::shared_ptr<file_iterator> &);
 
-//        virtual std::regex regex();
         virtual ICommandBuilder &setArgs();
 
         virtual ICommandBuilder &setState(std::shared_ptr<State> &);
@@ -42,6 +38,8 @@ namespace cpu_emulator::parser {
     class CommandBuilder : public ICommandBuilder {
     public:
         CommandBuilder() = default;
+        explicit CommandBuilder(std::shared_ptr<file_iterator> &);
+
 
         CommandBuilder<Command> &setArgs() override;
 
@@ -52,12 +50,13 @@ namespace cpu_emulator::parser {
 
     template<TemplateCommand Command>
     class CommandWithValueBuilder : public ICommandBuilder {
-//    private:
-//        Command command;
     private:
-        int value_;
+        std::regex value_regex_ = std::regex("[-+]?[0-9]+");
+        int value_ = 0;
     public:
         CommandWithValueBuilder() = default;
+        explicit CommandWithValueBuilder(std::shared_ptr<file_iterator> &);
+
 
         CommandWithValueBuilder<Command> &setArgs() override;
 
@@ -69,9 +68,21 @@ namespace cpu_emulator::parser {
     template<TemplateCommand Command>
     class CommandWithRegisterBuilder : public ICommandBuilder {
     private:
-        Register reg_;
+        Register reg_ = Register::ax;
+        std::map<Register, std::regex> register_regex_ = {
+                {Register::ax, std::regex("[aA][xX]")},
+                {Register::bx, std::regex("[bB][xX]")},
+                {Register::cx, std::regex("[cC][xX]")},
+                {Register::dx, std::regex("[dD][xX]")},
+                {Register::ex, std::regex("[eE][xX]")},
+                {Register::fx, std::regex("[fF][xX]")},
+                {Register::gx, std::regex("[gG][xX]")},
+                {Register::hx, std::regex("[hH][xX]")},
+        };
     public:
         CommandWithRegisterBuilder() = default;
+        explicit CommandWithRegisterBuilder(std::shared_ptr<file_iterator> &);
+
 
         CommandWithRegisterBuilder<Command> &setArgs() override;
 
@@ -84,8 +95,11 @@ namespace cpu_emulator::parser {
     class CommandWithLabelBuilder : public ICommandBuilder {
     private:
         std::string label_;
+        std::regex label_regex_ = std::regex("[a-zA-Z_][a-zA-Z0-9_]*");
     public:
         CommandWithLabelBuilder() = default;
+        explicit CommandWithLabelBuilder(std::shared_ptr<file_iterator> &);
+
 
         CommandWithLabelBuilder<Command> &setArgs() override;
 
@@ -94,10 +108,9 @@ namespace cpu_emulator::parser {
         std::unique_ptr<commands::ICommand> build() override;
     };
 
-    struct CommandRegex{
-        std::shared_ptr<ICommandBuilder> builder_;
-        std::regex regex_;
-//        std::shared_ptr<ICommandBuilder>
+    struct CommandRegex {
+        std::shared_ptr<ICommandBuilder> builder;
+        std::regex regex;
     };
 
 
@@ -105,52 +118,84 @@ namespace cpu_emulator::parser {
     private:
         std::istream_iterator<std::string> input_;
         std::smatch last_match_;
-//                std::map<commands::ICommand, std::regex> c{
-//                        {commands::Begin(), std::regex("BEGIN|BEG|begin|beg")},
-//                {CommandType::END,   std::regex("END|end")},
-//                {CommandType::PUSH,  std::regex("PUSH|push")},
-//                {CommandType::POP,   std::regex("POP|pop")},
-//                {CommandType::PUSHR, std::regex("PUSHR|pushr")},
-//                {CommandType::POPR,  std::regex("POPR|popr")
-//    };
+        std::vector<CommandRegex> command_regex_ = {
+                {std::make_unique<CommandBuilder<commands::Begin>>(), std::regex("BEGIN|BEG|begin|beg")},
+                {std::make_unique<CommandBuilder<commands::End>>(), std::regex("END|end")},
+                {std::make_unique<CommandWithValueBuilder<commands::Push>>(), std::regex("PUSH|push")},
+                {std::make_unique<CommandBuilder<commands::Pop>>(), std::regex("POP|pop")},
+                {std::make_unique<CommandWithRegisterBuilder<commands::Pushr>>(), std::regex("PUSHR|pushr")},
+                {std::make_unique<CommandWithRegisterBuilder<commands::Popr>>(), std::regex("POPR|popr")}
 
-//   auto a =  CommandBuilder<commands::Begin>(std::regex("BEGIN|BEG|begin|beg"));
-//auto vec = std::vector<std::pair<std::unique_ptr<ICommandBuilder>, std::regex>>{
-//std::make_pair(std::make_unique<CommandBuilder<commands::Begin>>(), std::regex("BEGIN|BEG|begin|beg")),
-//std::make_pair(std::make_unique<CommandBuilder<commands::Begin>>(), std::regex("BEGIN|BEG|begin|beg")),
-//std::make_pair(std::make_unique<CommandBuilder<commands::Begin>>(), std::regex("BEGIN|BEG|begin|beg")),
-//}
-////            std::make_pair<CommandBuilder<commands::Begin>, std::regex>(),
-//
-
-//std::vector<std::unique_ptr<ICommandBuilder>>{std::make_unique<CommandBuilder<commands::Begin>>(), std::make_unique<CommandBuilder<commands::Begin>>()}
-
-//std::map<std::unique_ptr<
-std::vector<CommandRegex> command_regex_ = {
-                {std::make_unique<CommandBuilder<commands::Begin>>(), std::regex("BEGIN|BEG|begin|beg")}
-
-};
-//    std::map<std::shared_ptr<ICommandBuilder>, std::regex> command_regex_;
-//                {ICommandBuilder(Args::VALUE, commands::Begin()), }
-//                {std::make_unique<CommandBuilder<commands::Begin>>(), std::regex("BEGIN|BEG|begin|beg")}
-
-//                std::make_unique<Builder<B>>()
-//                {CommandBuilder<commands::End>(Args::NONE),   std::regex("END|end")},
-//                {CommandBuilder<commands::Push>(Args::VALUE),  std::regex("PUSH|push")},
-//                {CommandBuilder<commands::Pop>(Args::NONE),   std::regex("POP|pop")},
-//                {CommandBuilder<commands::Pushr>(Args::REGISTER), std::regex("PUSHR|pushr")},
-//                {CommandBuilder<commands::Popr>(Args::REGISTER),  std::regex("POPR|popr")}
-//    };
+        };
+        std::regex value_regex_ = std::regex("[-+]?[0-9]+");
+        std::regex register_regex_ = std::regex("[a-hA-H][xX]");
+        std::regex label_regex_ = std::regex("[a-zA-Z_][a-zA-Z0-9_]*");
 
     public :
-    explicit Parser(std::ifstream &);
+        explicit Parser(std::ifstream &);
+//        Parser & SkipSpaces();
+        std::shared_ptr<ICommandBuilder> ParseCommand();
 
-    std::shared_ptr<ICommandBuilder> ParseCommand();
+        Register ParseRegister();
 
-    Register ParseRegister();
+        int ParseValue();
 
-    int ParseValue();
+    };
 
-};
+//    class IParser;
+//
+////    template<class Command>
+////    class CommandParser: public IParser;
+//
+//    class IParser{
+//    private:
+//        std::vector<CommandRegex> command_regex_; = {
+//                {std::make_unique<CommandParser<commands::Begin>>(), std::regex("BEGIN|BEG|begin|beg")},
+//                {std::make_unique<CommandBuilder<commands::End>>(), std::regex("END|end")},
+//                {std::make_unique<CommandWithValueBuilder<commands::Push>>(), std::regex("PUSH|push")},
+//                {std::make_unique<CommandBuilder<commands::Pop>>(), std::regex("POP|pop")},
+//                {std::make_unique<CommandWithRegisterBuilder<commands::Pushr>>(), std::regex("PUSHR|pushr")},
+//                {std::make_unique<CommandWithRegisterBuilder<commands::Popr>>(), std::regex("POPR|popr")}
+//
+//        };
+//    protected:
+//        std::shared_ptr<file_iterator> input_;
+//        std::regex register_regex_ = std::regex("[a-hA-H][xX]");
+//        std::regex label_regex_ = std::regex("[a-zA-Z_][a-zA-Z0-9_]*");
+//    public:
+//        explicit IParser(std::ifstream &);
+//        explicit IParser(std::shared_ptr<file_iterator> &);
+//
+//
+//        virtual IParser & ParseArgs();
+//        virtual IParser & ParseCommand();
+//        virtual std::unique_ptr<commands::ICommand> BuildCommand();
+//    };
+//
+//    template<class Command>
+//    class CommandParser : public IParser{
+//        explicit CommandParser(std::ifstream &);
+//        explicit CommandParser(std::shared_ptr<file_iterator> &);
+//
+//
+//        CommandParser<Command> & ParseArgs() override;
+//        CommandParser<Command> & ParseCommand() override;
+//        std::unique_ptr<commands::ICommand> BuildCommand() override;
+//    };
+//
+//    template<class Command>
+//    class CommandWithValueParser : public IParser{
+//    private:
+//        std::regex value_regex_ = std::regex("[-+]?[0-9]+");
+//        int value;
+//    public:
+//        explicit CommandWithValueParser(std::ifstream &);
+//        explicit CommandWithValueParser(std::shared_ptr<file_iterator> &);
+//
+//
+//        CommandWithValueParser<Command> & ParseArgs() override;
+//        CommandWithValueParser<Command> & ParseCommand() override;
+//        std::unique_ptr<commands::ICommand> BuildCommand() override;
+//    };
 }
 #endif //CPU_EMULATOR_PARSER_H

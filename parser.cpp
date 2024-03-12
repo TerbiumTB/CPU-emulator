@@ -6,77 +6,28 @@
 #include "parser.h"
 
 namespace cpu_emulator::parser {
-//    TokenParser::TokenParser(std::ifstream & input_file) {
-//        input_ = std::istream_iterator<std::string>(input_file);
-//    };
-//
-//    [[nodiscard]] bool TokenParser::IsDefined() const {
-//        return token_.type != TokenType::UNDEFINED;
-//    }
-//
-//    TokenParser &TokenParser::Parse(TokenType type) {
-//        std::regex_search(*input_, last_match_, token_regex_.at(type));
-//
-//        if (last_match_.empty()) {
-//            token_ = {*input_, TokenType::UNDEFINED};
-//            return *this;
-//        }
-//
-//        ++input_;
-//        token_ = {last_match_.str(), type};
-//        return *this;
-//    }
-//
-////    TokenParser &TokenParser::Skip(TokenType type) {
-////        std::regex_search(input_.cbegin() + offset_, input_.cend(), token_regex_.at(type));
-////        if (last_match_.empty()) {
-////            throw syntax_error();
-////        }
-////        offset_ = last_match_.position() + last_match_.length();
-////        return *this;
-////    }
-//    TokenParser &TokenParser::OrElse(TokenType type) {
-//        if(!last_match_.empty()){
-//            return *this;
-//        }
-//
-//        return Parse(type);
-//    }
-//
-////    CommandType TokenParser::CommandParse() {
-////
-////        for(auto const&[type, reg] : command_regex_){
-////            if (std::regex_match(token_.value, reg)){
-////                return type;
-////            }
-////        }
-////        return CommandType::UNDEFINED;
-////    }
-//
-//    [[nodiscard]] Token TokenParser::get_token() const {
-//        return token_;
-//    }
+    //interface---------------------------------
+    ICommandBuilder::ICommandBuilder(std::shared_ptr<file_iterator> &input)
+            : input_(input) {}
 
-//    CommandType CommandParser::Parse(const std::string & command_){
-//        for(auto const&[type, reg] : command_regex_){
-//            if (std::regex_match(command_, reg)){
-//                return type;
-//            }
-//        }
-//        return CommandType::UNDEFINED;
-//    }
     std::unique_ptr<commands::ICommand> ICommandBuilder::build() {
         return std::make_unique<commands::ICommand>(state_);
     }
 
-    ICommandBuilder &ICommandBuilder::setState(std::shared_ptr<State> & state) {
+    ICommandBuilder &ICommandBuilder::setState(std::shared_ptr<State> &state) {
         state_ = state;
         return *this;
     }
+
     ICommandBuilder &ICommandBuilder::setArgs() {
         return *this;
     }
+    //---------------------------------
 
+    //No args builder---------------------------------
+    template<TemplateCommand Command>
+    CommandBuilder<Command>::CommandBuilder(std::shared_ptr<file_iterator> &input)
+    : ICommandBuilder(input){}
 
     template<TemplateCommand Command>
     CommandBuilder<Command> &CommandBuilder<Command>::setArgs() {
@@ -84,50 +35,127 @@ namespace cpu_emulator::parser {
     }
 
     template<TemplateCommand Command>
-    CommandBuilder<Command> &CommandBuilder<Command>::setState(std::shared_ptr<State> & state) {
+    CommandBuilder<Command> &CommandBuilder<Command>::setState(std::shared_ptr<State> &state) {
         state_ = state;
         return *this;
     }
 
     template<TemplateCommand Command>
     std::unique_ptr<commands::ICommand> CommandBuilder<Command>::build() {
-
         return std::make_unique<Command>(Command(state_));
     }
+    //---------------------------------
+
+
+    //builder with value---------------------------------
+    template<TemplateCommand Command>
+    CommandWithValueBuilder<Command>::CommandWithValueBuilder(std::shared_ptr<file_iterator> &input)
+            : ICommandBuilder(input){}
 
     template<TemplateCommand Command>
     CommandWithValueBuilder<Command> &CommandWithValueBuilder<Command>::setArgs() {
-        int value =1;
-        return *this;
+        if (std::regex_match(input_->operator*(), value_regex_)) {
+            value_ = std::stoi(input_->operator*());
+            input_->operator++();
+            return *this;
+        }
+        throw;
     }
 
     template<TemplateCommand Command>
-    CommandWithValueBuilder<Command> &CommandWithValueBuilder<Command>::setState(std::shared_ptr<State> & state) {
+    CommandWithValueBuilder<Command> &CommandWithValueBuilder<Command>::setState(std::shared_ptr<State> &state) {
         state_ = state;
         return *this;
     }
 
     template<TemplateCommand Command>
     std::unique_ptr<commands::ICommand> CommandWithValueBuilder<Command>::build() {
-
         return std::make_unique<Command>(Command(state_, value_));
     }
+    //---------------------------------
 
+    //buider with register---------------------------------
+    template<TemplateCommand Command>
+    CommandWithRegisterBuilder<Command> &CommandWithRegisterBuilder<Command>::setArgs() {
+        if (std::regex_match(input_->operator*(), register_regex_)) {
+            auto r = input_->operator*()[0];
+            switch(r){
+                case 'B':
+                case 'b':
+                    reg_ = Register::bx;
+                    break;
+                case 'C':
+                case 'c':
+                    reg_ = Register::cx;
+                    break;
+                case 'D':
+                case 'd':
+                    reg_ = Register::dx;
+                    break;
+                case 'E':
+                case 'e':
+                    reg_ = Register::ex;
+                    break;
+                case 'F':
+                case 'f':
+                    reg_ = Register::fx;
+                    break;
+                case 'G':
+                case 'g':
+                    reg_ = Register::gx;
+                    break;
+                case 'H':
+                case 'h':
+                    reg_ = Register::hx;
+                    break;
+                default:
+                    reg_ = Register::ax;
+            }
+            input_->operator++();
+            return *this;
+        }
+        throw;
+        reg_ = Register::ax;
+        return *this;
+    }
 
-    Parser::Parser(std::ifstream & input_file) {
-//        command_regex_[std::shared_ptr<CommandBuilder<commands::Begin>>()] = std::regex("BEGIN|BEG|begin|beg");
-//        command_regex_[std::shared_ptr<CommandWithValueBuilder<commands::Push>>()] = std::regex("PUSH|push");
+    template<TemplateCommand Command>
+    CommandWithRegisterBuilder<Command> &CommandWithRegisterBuilder<Command>::setState(std::shared_ptr<State> &state) {
+        state_ = state;
+        return *this;
+    }
+
+    template<TemplateCommand Command>
+    std::unique_ptr<commands::ICommand> CommandWithRegisterBuilder<Command>::build() {
+        return std::make_unique<Command>(Command(state_, reg_));
+    }
+    //---------------------------------
+
+    Parser::Parser(std::ifstream &input_file) {
         input_ = std::istream_iterator<std::string>(input_file);
     }
+
     std::shared_ptr<ICommandBuilder> Parser::ParseCommand() {
-        for(auto &reg : command_regex_){
+        for (auto &reg: command_regex_) {
 //            std::cout << ;
-            if (std::regex_match(*input_, reg.regex_)){
-                return reg.builder_;
+            if (std::regex_match(*input_, reg.regex)) {
+                input_++;
+                return reg.builder;
             }
         }
 
         return {};
-//        return std::make_unique<CommandBuilder<commands::Begin>>(CommandBuilder<commands::Begin>(Args::NONE));
     }
+
+    int Parser::ParseValue() {
+        if (std::regex_match(*input_, value_regex_)) {
+            int value = std::stoi(*input_);
+            input_++;
+            return value;
+        }
+        throw;
+    }
+//    IParser::IParser(std::ifstream &) {
+//
+//    }
 }

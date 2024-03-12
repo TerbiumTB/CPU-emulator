@@ -1,9 +1,9 @@
 beg
-	in
+	push 2
 	popr ax
-	in
+	push 3
 	popr bx
-	in
+	push 4
 	popr cx
 
 	pushr ax

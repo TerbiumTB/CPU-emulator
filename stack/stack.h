@@ -4,6 +4,10 @@
 #include <utility>
 
 namespace generics {
+    struct empty_stack_access: public std::out_of_range{
+        empty_stack_access() : std::out_of_range("stack is empty!") {};
+    };
+
     template<typename T>
     class stack {
     private:
@@ -69,7 +73,7 @@ namespace generics {
 
         T &top() {
             if (empty()) {
-                throw std::out_of_range("stack is empty!");
+                throw empty_stack_access();
             }
             return stack_[head_];
         }
@@ -91,7 +95,7 @@ namespace generics {
 
         const T &pop() {
             if (empty()) {
-                throw std::out_of_range("stack is empty!");
+                throw empty_stack_access();
             }
             head_--;
             return stack_[head_ + 1];
