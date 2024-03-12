@@ -7,7 +7,7 @@
 using namespace cpu_emulator;
 
 int main() {
-    auto emulator = CpuEmulator("/Users/timofejbulgakov/CLionProjects/CPU_emulator/program.crash");
+    auto emulator = CpuEmulator("/Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/program.crash");
     emulator.Run();
     return 0;
 }

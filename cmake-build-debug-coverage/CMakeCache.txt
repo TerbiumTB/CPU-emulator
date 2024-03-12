@@ -588,6 +588,8 @@ _Python_EXECUTABLE:INTERNAL=/Users/timofeybulgakov/opt/anaconda3/bin/python3.9
 //Python Properties
 _Python_INTERPRETER_PROPERTIES:INTERNAL=Python;3;9;7;64;;cpython-39-darwin;abi3;/Users/timofeybulgakov/opt/anaconda3/lib/python3.9;/Users/timofeybulgakov/opt/anaconda3/lib/python3.9;/Users/timofeybulgakov/opt/anaconda3/lib/python3.9/site-packages;/Users/timofeybulgakov/opt/anaconda3/lib/python3.9/site-packages
 _Python_INTERPRETER_SIGNATURE:INTERNAL=5375906739b55daf48058fb2e1f7c97c
+//Interpreter reason failure
+_Python_Interpreter_REASON_FAILURE:INTERNAL=
 //NumPy reason failure
 _Python_NumPy_REASON_FAILURE:INTERNAL=
 cmake_package_name:INTERNAL=GTest

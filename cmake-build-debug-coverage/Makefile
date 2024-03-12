@@ -239,6 +239,78 @@ stack-tests/fast:
 	$(MAKE) $(MAKESILENT) -f stack/tests/CMakeFiles/stack-tests.dir/build.make stack/tests/CMakeFiles/stack-tests.dir/build
 .PHONY : stack-tests/fast
 
+command_builder.o: command_builder.cpp.o
+.PHONY : command_builder.o
+
+# target to build an object file
+command_builder.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpu_emulator.dir/build.make CMakeFiles/cpu_emulator.dir/command_builder.cpp.o
+.PHONY : command_builder.cpp.o
+
+command_builder.i: command_builder.cpp.i
+.PHONY : command_builder.i
+
+# target to preprocess a source file
+command_builder.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpu_emulator.dir/build.make CMakeFiles/cpu_emulator.dir/command_builder.cpp.i
+.PHONY : command_builder.cpp.i
+
+command_builder.s: command_builder.cpp.s
+.PHONY : command_builder.s
+
+# target to generate assembly for a file
+command_builder.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpu_emulator.dir/build.make CMakeFiles/cpu_emulator.dir/command_builder.cpp.s
+.PHONY : command_builder.cpp.s
+
+commands.o: commands.cpp.o
+.PHONY : commands.o
+
+# target to build an object file
+commands.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpu_emulator.dir/build.make CMakeFiles/cpu_emulator.dir/commands.cpp.o
+.PHONY : commands.cpp.o
+
+commands.i: commands.cpp.i
+.PHONY : commands.i
+
+# target to preprocess a source file
+commands.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpu_emulator.dir/build.make CMakeFiles/cpu_emulator.dir/commands.cpp.i
+.PHONY : commands.cpp.i
+
+commands.s: commands.cpp.s
+.PHONY : commands.s
+
+# target to generate assembly for a file
+commands.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpu_emulator.dir/build.make CMakeFiles/cpu_emulator.dir/commands.cpp.s
+.PHONY : commands.cpp.s
+
+cpu-emulator.o: cpu-emulator.cpp.o
+.PHONY : cpu-emulator.o
+
+# target to build an object file
+cpu-emulator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpu_emulator.dir/build.make CMakeFiles/cpu_emulator.dir/cpu-emulator.cpp.o
+.PHONY : cpu-emulator.cpp.o
+
+cpu-emulator.i: cpu-emulator.cpp.i
+.PHONY : cpu-emulator.i
+
+# target to preprocess a source file
+cpu-emulator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpu_emulator.dir/build.make CMakeFiles/cpu_emulator.dir/cpu-emulator.cpp.i
+.PHONY : cpu-emulator.cpp.i
+
+cpu-emulator.s: cpu-emulator.cpp.s
+.PHONY : cpu-emulator.s
+
+# target to generate assembly for a file
+cpu-emulator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpu_emulator.dir/build.make CMakeFiles/cpu_emulator.dir/cpu-emulator.cpp.s
+.PHONY : cpu-emulator.cpp.s
+
 main.o: main.cpp.o
 .PHONY : main.o
 
@@ -263,6 +335,54 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpu_emulator.dir/build.make CMakeFiles/cpu_emulator.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+parser.o: parser.cpp.o
+.PHONY : parser.o
+
+# target to build an object file
+parser.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpu_emulator.dir/build.make CMakeFiles/cpu_emulator.dir/parser.cpp.o
+.PHONY : parser.cpp.o
+
+parser.i: parser.cpp.i
+.PHONY : parser.i
+
+# target to preprocess a source file
+parser.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpu_emulator.dir/build.make CMakeFiles/cpu_emulator.dir/parser.cpp.i
+.PHONY : parser.cpp.i
+
+parser.s: parser.cpp.s
+.PHONY : parser.s
+
+# target to generate assembly for a file
+parser.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpu_emulator.dir/build.make CMakeFiles/cpu_emulator.dir/parser.cpp.s
+.PHONY : parser.cpp.s
+
+preprocessor.o: preprocessor.cpp.o
+.PHONY : preprocessor.o
+
+# target to build an object file
+preprocessor.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpu_emulator.dir/build.make CMakeFiles/cpu_emulator.dir/preprocessor.cpp.o
+.PHONY : preprocessor.cpp.o
+
+preprocessor.i: preprocessor.cpp.i
+.PHONY : preprocessor.i
+
+# target to preprocess a source file
+preprocessor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpu_emulator.dir/build.make CMakeFiles/cpu_emulator.dir/preprocessor.cpp.i
+.PHONY : preprocessor.cpp.i
+
+preprocessor.s: preprocessor.cpp.s
+.PHONY : preprocessor.s
+
+# target to generate assembly for a file
+preprocessor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpu_emulator.dir/build.make CMakeFiles/cpu_emulator.dir/preprocessor.cpp.s
+.PHONY : preprocessor.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -281,9 +401,24 @@ help:
 	@echo "... gtest"
 	@echo "... gtest_main"
 	@echo "... stack-tests"
+	@echo "... command_builder.o"
+	@echo "... command_builder.i"
+	@echo "... command_builder.s"
+	@echo "... commands.o"
+	@echo "... commands.i"
+	@echo "... commands.s"
+	@echo "... cpu-emulator.o"
+	@echo "... cpu-emulator.i"
+	@echo "... cpu-emulator.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... parser.o"
+	@echo "... parser.i"
+	@echo "... parser.s"
+	@echo "... preprocessor.o"
+	@echo "... preprocessor.i"
+	@echo "... preprocessor.s"
 .PHONY : help
 
 

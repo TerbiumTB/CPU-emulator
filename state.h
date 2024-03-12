@@ -31,30 +31,35 @@ namespace cpu_emulator {
         gx,
         hx
     };
+    enum class Execution{
+        NOT_STARTED,
+        STARTED,
+        ENDED
+    };
 
     struct State {
         generics::stack<int> stack;
-//        std::map<Register, int> registers = {
-//                {Register::ax, 0},
-//                {Register::bx, 0},
-//                {Register::cx, 0},
-//                {Register::dx, 0},
-//                {Register::ex, 0},
-//                {Register::fx, 0},
-//                {Register::gx, 0},
-//                {Register::hx, 0},
-//        };
-        std::map<std::string, int> registers = {
-                {"ax", 0},
-                {"bx", 0},
-                {"cx", 0},
-                {"dx", 0},
-                {"ex", 0},
-                {"fx", 0},
-                {"gx", 0},
-                {"hx", 0},
+        std::map<Register, int> registers = {
+                {Register::ax, 0},
+                {Register::bx, 0},
+                {Register::cx, 0},
+                {Register::dx, 0},
+                {Register::ex, 0},
+                {Register::fx, 0},
+                {Register::gx, 0},
+                {Register::hx, 0},
         };
-        bool run = false;
+//        std::map<std::string, int> registers = {
+//                {"ax", 0},
+//                {"bx", 0},
+//                {"cx", 0},
+//                {"dx", 0},
+//                {"ex", 0},
+//                {"fx", 0},
+//                {"gx", 0},
+//                {"hx", 0},
+//        };
+        Execution run = Execution::NOT_STARTED;
         int start;
     };
 }

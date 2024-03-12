@@ -386,7 +386,37 @@
 		<Unit filename="/Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/cmake-build-debug-coverage/_deps/googletest-src/googletest/src/gtest_main.cc">
 			<Option target="gtest_main"/>
 		</Unit>
+		<Unit filename="/Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/command_builder.cpp">
+			<Option target="cpu_emulator"/>
+		</Unit>
+		<Unit filename="/Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/command_builder.h">
+			<Option target="cpu_emulator"/>
+		</Unit>
+		<Unit filename="/Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/commands.cpp">
+			<Option target="cpu_emulator"/>
+		</Unit>
+		<Unit filename="/Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/commands.h">
+			<Option target="cpu_emulator"/>
+		</Unit>
+		<Unit filename="/Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/cpu-emulator.cpp">
+			<Option target="cpu_emulator"/>
+		</Unit>
+		<Unit filename="/Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/cpu-emulator.h">
+			<Option target="cpu_emulator"/>
+		</Unit>
 		<Unit filename="/Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/main.cpp">
+			<Option target="cpu_emulator"/>
+		</Unit>
+		<Unit filename="/Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/parser.cpp">
+			<Option target="cpu_emulator"/>
+		</Unit>
+		<Unit filename="/Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/parser.h">
+			<Option target="cpu_emulator"/>
+		</Unit>
+		<Unit filename="/Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/preprocessor.cpp">
+			<Option target="cpu_emulator"/>
+		</Unit>
+		<Unit filename="/Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/preprocessor.h">
 			<Option target="cpu_emulator"/>
 		</Unit>
 		<Unit filename="/Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/stack/tests/stack-tests.cpp">

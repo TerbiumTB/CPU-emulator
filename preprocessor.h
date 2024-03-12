@@ -15,12 +15,12 @@ namespace cpu_emulator::preprocessor{
     class Preprocessor{
     private:
         parser::Parser parser_;
-        std::vector<std::unique_ptr<commands::ICommand>> commands_;
+        std::vector<std::shared_ptr<commands::ICommand>> commands_;
         std::shared_ptr<State> state_;
 
     public:
         Preprocessor(std::ifstream &, std::shared_ptr<State> &);
-        std::vector<std::unique_ptr<commands::ICommand>> Process();
+        std::vector<std::shared_ptr<commands::ICommand>> Process();
 
     };
 }

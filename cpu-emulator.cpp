@@ -26,8 +26,9 @@ namespace cpu_emulator {
         auto commands = preprocessor::Preprocessor(input_file_, state_).Process();
 
         for(auto &command : commands){
-//            if()
+            command->DoIt();
         }
+        std::cout << state_->registers.at(Register::ax);
     }
 
 }

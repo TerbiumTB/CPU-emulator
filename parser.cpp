@@ -14,6 +14,10 @@ namespace cpu_emulator::parser {
         return std::make_unique<commands::ICommand>(state_);
     }
 
+    void ICommandBuilder::input(std::shared_ptr<file_iterator> & input) {
+        input_ = input;
+    }
+
     ICommandBuilder &ICommandBuilder::setState(std::shared_ptr<State> &state) {
         state_ = state;
         return *this;
@@ -59,7 +63,7 @@ namespace cpu_emulator::parser {
             input_->operator++();
             return *this;
         }
-        throw;
+        throw syntax_error();
     }
 
     template<TemplateCommand Command>
@@ -76,47 +80,53 @@ namespace cpu_emulator::parser {
 
     //buider with register---------------------------------
     template<TemplateCommand Command>
+    CommandWithRegisterBuilder<Command>::CommandWithRegisterBuilder(std::shared_ptr<file_iterator> &input)
+            : ICommandBuilder(input){}
+    template<TemplateCommand Command>
     CommandWithRegisterBuilder<Command> &CommandWithRegisterBuilder<Command>::setArgs() {
-        if (std::regex_match(input_->operator*(), register_regex_)) {
-            auto r = input_->operator*()[0];
-            switch(r){
-                case 'B':
-                case 'b':
-                    reg_ = Register::bx;
-                    break;
-                case 'C':
-                case 'c':
-                    reg_ = Register::cx;
-                    break;
-                case 'D':
-                case 'd':
-                    reg_ = Register::dx;
-                    break;
-                case 'E':
-                case 'e':
-                    reg_ = Register::ex;
-                    break;
-                case 'F':
-                case 'f':
-                    reg_ = Register::fx;
-                    break;
-                case 'G':
-                case 'g':
-                    reg_ = Register::gx;
-                    break;
-                case 'H':
-                case 'h':
-                    reg_ = Register::hx;
-                    break;
-                default:
-                    reg_ = Register::ax;
+        for (auto &[reg, match] : register_regex_){
+            if ((std::regex_match(input_->operator*(), match))){
+                input_->operator++();
+                return *this;
             }
-            input_->operator++();
-            return *this;
         }
-        throw;
-        reg_ = Register::ax;
-        return *this;
+//        if (std::regex_match(input_->operator*(), register_regex_)) {
+//            auto r = input_->operator*()[0];
+//            switch(r){
+//                case 'B':
+//                case 'b':
+//                    reg_ = Register::bx;
+//                    break;
+//                case 'C':
+//                case 'c':
+//                    reg_ = Register::cx;
+//                    break;
+//                case 'D':
+//                case 'd':
+//                    reg_ = Register::dx;
+//                    break;
+//                case 'E':
+//                case 'e':
+//                    reg_ = Register::ex;
+//                    break;
+//                case 'F':
+//                case 'f':
+//                    reg_ = Register::fx;
+//                    break;
+//                case 'G':
+//                case 'g':
+//                    reg_ = Register::gx;
+//                    break;
+//                case 'H':
+//                case 'h':
+//                    reg_ = Register::hx;
+//                    break;
+//                default:
+//                    reg_ = Register::ax;
+//            }
+
+//        }
+        throw syntax_error();
     }
 
     template<TemplateCommand Command>
@@ -132,30 +142,22 @@ namespace cpu_emulator::parser {
     //---------------------------------
 
     Parser::Parser(std::ifstream &input_file) {
-        input_ = std::istream_iterator<std::string>(input_file);
+        input_ = std::make_shared<file_iterator>(file_iterator(input_file));
     }
 
     std::shared_ptr<ICommandBuilder> Parser::ParseCommand() {
         for (auto &reg: command_regex_) {
-//            std::cout << ;
-            if (std::regex_match(*input_, reg.regex)) {
-                input_++;
+            if (std::regex_match(input_->operator*(), reg.regex)) {
+                input_->operator++();
+                reg.builder->input(input_);
                 return reg.builder;
             }
         }
 
-        return {};
+        throw syntax_error();
     }
 
-    int Parser::ParseValue() {
-        if (std::regex_match(*input_, value_regex_)) {
-            int value = std::stoi(*input_);
-            input_++;
-            return value;
-        }
-        throw;
+    bool Parser::IsEmpty() {
+        return *input_ == std::istream_iterator<std::string>();
     }
-//    IParser::IParser(std::ifstream &) {
-//
-//    }
 }

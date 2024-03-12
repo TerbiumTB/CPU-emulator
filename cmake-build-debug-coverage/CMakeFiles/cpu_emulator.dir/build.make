@@ -83,17 +83,97 @@ CMakeFiles/cpu_emulator.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cpu_emulator.dir/main.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/main.cpp -o CMakeFiles/cpu_emulator.dir/main.cpp.s
 
+CMakeFiles/cpu_emulator.dir/cpu-emulator.cpp.o: CMakeFiles/cpu_emulator.dir/flags.make
+CMakeFiles/cpu_emulator.dir/cpu-emulator.cpp.o: /Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/cpu-emulator.cpp
+CMakeFiles/cpu_emulator.dir/cpu-emulator.cpp.o: CMakeFiles/cpu_emulator.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/cpu_emulator.dir/cpu-emulator.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/cpu_emulator.dir/cpu-emulator.cpp.o -MF CMakeFiles/cpu_emulator.dir/cpu-emulator.cpp.o.d -o CMakeFiles/cpu_emulator.dir/cpu-emulator.cpp.o -c /Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/cpu-emulator.cpp
+
+CMakeFiles/cpu_emulator.dir/cpu-emulator.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cpu_emulator.dir/cpu-emulator.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/cpu-emulator.cpp > CMakeFiles/cpu_emulator.dir/cpu-emulator.cpp.i
+
+CMakeFiles/cpu_emulator.dir/cpu-emulator.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cpu_emulator.dir/cpu-emulator.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/cpu-emulator.cpp -o CMakeFiles/cpu_emulator.dir/cpu-emulator.cpp.s
+
+CMakeFiles/cpu_emulator.dir/preprocessor.cpp.o: CMakeFiles/cpu_emulator.dir/flags.make
+CMakeFiles/cpu_emulator.dir/preprocessor.cpp.o: /Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/preprocessor.cpp
+CMakeFiles/cpu_emulator.dir/preprocessor.cpp.o: CMakeFiles/cpu_emulator.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/cpu_emulator.dir/preprocessor.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/cpu_emulator.dir/preprocessor.cpp.o -MF CMakeFiles/cpu_emulator.dir/preprocessor.cpp.o.d -o CMakeFiles/cpu_emulator.dir/preprocessor.cpp.o -c /Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/preprocessor.cpp
+
+CMakeFiles/cpu_emulator.dir/preprocessor.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cpu_emulator.dir/preprocessor.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/preprocessor.cpp > CMakeFiles/cpu_emulator.dir/preprocessor.cpp.i
+
+CMakeFiles/cpu_emulator.dir/preprocessor.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cpu_emulator.dir/preprocessor.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/preprocessor.cpp -o CMakeFiles/cpu_emulator.dir/preprocessor.cpp.s
+
+CMakeFiles/cpu_emulator.dir/parser.cpp.o: CMakeFiles/cpu_emulator.dir/flags.make
+CMakeFiles/cpu_emulator.dir/parser.cpp.o: /Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/parser.cpp
+CMakeFiles/cpu_emulator.dir/parser.cpp.o: CMakeFiles/cpu_emulator.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/cpu_emulator.dir/parser.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/cpu_emulator.dir/parser.cpp.o -MF CMakeFiles/cpu_emulator.dir/parser.cpp.o.d -o CMakeFiles/cpu_emulator.dir/parser.cpp.o -c /Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/parser.cpp
+
+CMakeFiles/cpu_emulator.dir/parser.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cpu_emulator.dir/parser.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/parser.cpp > CMakeFiles/cpu_emulator.dir/parser.cpp.i
+
+CMakeFiles/cpu_emulator.dir/parser.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cpu_emulator.dir/parser.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/parser.cpp -o CMakeFiles/cpu_emulator.dir/parser.cpp.s
+
+CMakeFiles/cpu_emulator.dir/commands.cpp.o: CMakeFiles/cpu_emulator.dir/flags.make
+CMakeFiles/cpu_emulator.dir/commands.cpp.o: /Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/commands.cpp
+CMakeFiles/cpu_emulator.dir/commands.cpp.o: CMakeFiles/cpu_emulator.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/cpu_emulator.dir/commands.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/cpu_emulator.dir/commands.cpp.o -MF CMakeFiles/cpu_emulator.dir/commands.cpp.o.d -o CMakeFiles/cpu_emulator.dir/commands.cpp.o -c /Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/commands.cpp
+
+CMakeFiles/cpu_emulator.dir/commands.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cpu_emulator.dir/commands.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/commands.cpp > CMakeFiles/cpu_emulator.dir/commands.cpp.i
+
+CMakeFiles/cpu_emulator.dir/commands.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cpu_emulator.dir/commands.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/commands.cpp -o CMakeFiles/cpu_emulator.dir/commands.cpp.s
+
+CMakeFiles/cpu_emulator.dir/command_builder.cpp.o: CMakeFiles/cpu_emulator.dir/flags.make
+CMakeFiles/cpu_emulator.dir/command_builder.cpp.o: /Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/command_builder.cpp
+CMakeFiles/cpu_emulator.dir/command_builder.cpp.o: CMakeFiles/cpu_emulator.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/cpu_emulator.dir/command_builder.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/cpu_emulator.dir/command_builder.cpp.o -MF CMakeFiles/cpu_emulator.dir/command_builder.cpp.o.d -o CMakeFiles/cpu_emulator.dir/command_builder.cpp.o -c /Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/command_builder.cpp
+
+CMakeFiles/cpu_emulator.dir/command_builder.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cpu_emulator.dir/command_builder.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/command_builder.cpp > CMakeFiles/cpu_emulator.dir/command_builder.cpp.i
+
+CMakeFiles/cpu_emulator.dir/command_builder.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cpu_emulator.dir/command_builder.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/command_builder.cpp -o CMakeFiles/cpu_emulator.dir/command_builder.cpp.s
+
 # Object files for target cpu_emulator
 cpu_emulator_OBJECTS = \
-"CMakeFiles/cpu_emulator.dir/main.cpp.o"
+"CMakeFiles/cpu_emulator.dir/main.cpp.o" \
+"CMakeFiles/cpu_emulator.dir/cpu-emulator.cpp.o" \
+"CMakeFiles/cpu_emulator.dir/preprocessor.cpp.o" \
+"CMakeFiles/cpu_emulator.dir/parser.cpp.o" \
+"CMakeFiles/cpu_emulator.dir/commands.cpp.o" \
+"CMakeFiles/cpu_emulator.dir/command_builder.cpp.o"
 
 # External object files for target cpu_emulator
 cpu_emulator_EXTERNAL_OBJECTS =
 
 cpu_emulator: CMakeFiles/cpu_emulator.dir/main.cpp.o
+cpu_emulator: CMakeFiles/cpu_emulator.dir/cpu-emulator.cpp.o
+cpu_emulator: CMakeFiles/cpu_emulator.dir/preprocessor.cpp.o
+cpu_emulator: CMakeFiles/cpu_emulator.dir/parser.cpp.o
+cpu_emulator: CMakeFiles/cpu_emulator.dir/commands.cpp.o
+cpu_emulator: CMakeFiles/cpu_emulator.dir/command_builder.cpp.o
 cpu_emulator: CMakeFiles/cpu_emulator.dir/build.make
 cpu_emulator: CMakeFiles/cpu_emulator.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable cpu_emulator"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/timofeybulgakov/CLionProjects/HSEhomework/CPU-emulator/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable cpu_emulator"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/cpu_emulator.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

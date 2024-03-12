@@ -7,5 +7,4 @@ beg
 	popr cx
 
 	pushr ax
-	out
 end
