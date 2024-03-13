@@ -49,6 +49,7 @@ namespace cpu_emulator {
                 {Register::gx, 0},
                 {Register::hx, 0},
         };
+        std::map<std::string, int> labels;
 //        std::map<std::string, int> registers = {
 //                {"ax", 0},
 //                {"bx", 0},
@@ -60,7 +61,8 @@ namespace cpu_emulator {
 //                {"hx", 0},
 //        };
         Execution run = Execution::NOT_STARTED;
-        int start;
+        int stack_pointer;
+        int pivot = 0;
     };
 }
 

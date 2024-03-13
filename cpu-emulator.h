@@ -19,10 +19,23 @@ namespace cpu_emulator{
         std::ifstream input_file_;
         std::string input_file_name_;
         std::shared_ptr<State> state_;
-//        preprocessor::Preprocessor preproc_;
+//        parser::Parser parser_;
+//        std::vector<std::shared_ptr<commands::ICommand>> commands_;
+
+////        preprocessor::Preprocessor preproc_;
+//        class Preproccessor{
+//        private:
+//
+//
+//        public:
+//            Preproccessor();
+//            std::vector<std::shared_ptr<commands::ICommand>> Process();
+//        };
+
+//        std::vector<std::shared_ptr<commands::ICommand>> Process();
 
     public:
-        explicit CpuEmulator(std::string);
+        explicit CpuEmulator(const std::string &);
 
         void Run();
     };

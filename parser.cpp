@@ -6,7 +6,7 @@
 #include "parser.h"
 
 namespace cpu_emulator::parser {
-    //interface---------------------------------
+    //interface builder---------------------------------
     ICommandBuilder::ICommandBuilder(std::shared_ptr<file_iterator> &input)
             : input_(input) {}
 
@@ -14,7 +14,7 @@ namespace cpu_emulator::parser {
         return std::make_unique<commands::ICommand>(state_);
     }
 
-    void ICommandBuilder::input(std::shared_ptr<file_iterator> & input) {
+    void ICommandBuilder::input(std::shared_ptr<file_iterator> &input) {
         input_ = input;
     }
 
@@ -31,7 +31,7 @@ namespace cpu_emulator::parser {
     //No args builder---------------------------------
     template<TemplateCommand Command>
     CommandBuilder<Command>::CommandBuilder(std::shared_ptr<file_iterator> &input)
-    : ICommandBuilder(input){}
+            : ICommandBuilder(input) {}
 
     template<TemplateCommand Command>
     CommandBuilder<Command> &CommandBuilder<Command>::setArgs() {
@@ -54,13 +54,15 @@ namespace cpu_emulator::parser {
     //builder with value---------------------------------
     template<TemplateCommand Command>
     CommandWithValueBuilder<Command>::CommandWithValueBuilder(std::shared_ptr<file_iterator> &input)
-            : ICommandBuilder(input){}
+            : ICommandBuilder(input) {}
 
     template<TemplateCommand Command>
     CommandWithValueBuilder<Command> &CommandWithValueBuilder<Command>::setArgs() {
-        if (std::regex_match(input_->operator*(), value_regex_)) {
-            value_ = std::stoi(input_->operator*());
-            input_->operator++();
+//        input_->operator*()
+        if (std::regex_match(*(*input_), value_regex_)) {
+            value_ = std::stoi(*(*input_));
+//            input_->operator++();
+            (*input_)++;
             return *this;
         }
         throw syntax_error();
@@ -81,51 +83,54 @@ namespace cpu_emulator::parser {
     //buider with register---------------------------------
     template<TemplateCommand Command>
     CommandWithRegisterBuilder<Command>::CommandWithRegisterBuilder(std::shared_ptr<file_iterator> &input)
-            : ICommandBuilder(input){}
+            : ICommandBuilder(input) {}
+
     template<TemplateCommand Command>
     CommandWithRegisterBuilder<Command> &CommandWithRegisterBuilder<Command>::setArgs() {
-        for (auto &[reg, match] : register_regex_){
-            if ((std::regex_match(input_->operator*(), match))){
-                input_->operator++();
+        for (auto &[reg, match]: register_regex_) {
+            if ((std::regex_match(*(*input_), match))) {
+                reg_ = reg;
+                (*input_)++;
                 return *this;
             }
         }
-//        if (std::regex_match(input_->operator*(), register_regex_)) {
-//            auto r = input_->operator*()[0];
-//            switch(r){
-//                case 'B':
-//                case 'b':
-//                    reg_ = Register::bx;
-//                    break;
-//                case 'C':
-//                case 'c':
-//                    reg_ = Register::cx;
-//                    break;
-//                case 'D':
-//                case 'd':
-//                    reg_ = Register::dx;
-//                    break;
-//                case 'E':
-//                case 'e':
-//                    reg_ = Register::ex;
-//                    break;
-//                case 'F':
-//                case 'f':
-//                    reg_ = Register::fx;
-//                    break;
-//                case 'G':
-//                case 'g':
-//                    reg_ = Register::gx;
-//                    break;
-//                case 'H':
-//                case 'h':
-//                    reg_ = Register::hx;
-//                    break;
-//                default:
-//                    reg_ = Register::ax;
-//            }
+/*        if (std::regex_match(input_->operator*(), register_regex_)) {
+            auto r = input_->operator*()[0];
+            switch(r){
+                case 'B':
+                case 'b':
+                    reg_ = Register::bx;
+                    break;
+                case 'C':
+                case 'c':
+                    reg_ = Register::cx;
+                    break;
+                case 'D':
+                case 'd':
+                    reg_ = Register::dx;
+                    break;
+                case 'E':
+                case 'e':
+                    reg_ = Register::ex;
+                    break;
+                case 'F':
+                case 'f':
+                    reg_ = Register::fx;
+                    break;
+                case 'G':
+                case 'g':
+                    reg_ = Register::gx;
+                    break;
+                case 'H':
+                case 'h':
+                    reg_ = Register::hx;
+                    break;
+                default:
+                    reg_ = Register::ax;
+            }
 
-//        }
+        }*/
+
         throw syntax_error();
     }
 
@@ -141,18 +146,51 @@ namespace cpu_emulator::parser {
     }
     //---------------------------------
 
+    //buider with label---------------------------------
+    template<TemplateCommand Command>
+    CommandWithLabelBuilder<Command>::CommandWithLabelBuilder(std::shared_ptr<file_iterator> &input)
+            : ICommandBuilder(input) {}
+
+    template<TemplateCommand Command>
+    CommandWithLabelBuilder<Command> &CommandWithLabelBuilder<Command>::setArgs() {
+        if (std::regex_match(*(*input_), label_regex_)) {
+            label_ = *(*input_);
+//            input_->operator++();
+            (*input_)++;
+            return *this;
+        }
+        throw syntax_error();
+    }
+
+    template<TemplateCommand Command>
+    CommandWithLabelBuilder<Command> &CommandWithLabelBuilder<Command>::setState(std::shared_ptr<State> &state) {
+        state_ = state;
+        return *this;
+    }
+
+    template<TemplateCommand Command>
+    std::unique_ptr<commands::ICommand> CommandWithLabelBuilder<Command>::build() {
+        return std::make_unique<Command>(Command(state_, label_));
+    }
+    //---------------------------------
+
     Parser::Parser(std::ifstream &input_file) {
         input_ = std::make_shared<file_iterator>(file_iterator(input_file));
     }
 
     std::shared_ptr<ICommandBuilder> Parser::ParseCommand() {
         for (auto &reg: command_regex_) {
-            if (std::regex_match(input_->operator*(), reg.regex)) {
-                input_->operator++();
+            if (std::regex_match(*(*input_), reg.regex)) {
+                (*input_)++;
                 reg.builder->input(input_);
                 return reg.builder;
             }
         }
+
+        if(std::regex_match(*(*input_), label_regex_)) {
+            return std::make_shared<CommandWithLabelBuilder<commands::Label>>(input_);
+        }
+
 
         throw syntax_error();
     }

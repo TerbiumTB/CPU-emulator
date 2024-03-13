@@ -1,0 +1,38 @@
+beg
+    push 1
+    push 1
+
+    push 2
+    in
+
+    push 1
+    push 1
+    out
+    out
+
+
+
+    next:
+    popr ax
+    popr bx
+
+    add
+    popr fx
+    pushr fx
+    out
+    pushr fx
+
+    push 1
+    pushr ax
+
+    sub
+    popr ax
+    pop
+    pop
+
+    pushr bx
+    pushr ax
+
+
+    jne next
+end

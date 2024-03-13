@@ -1,10 +1,18 @@
 beg
-	push 2
-	popr ax
-	push 3
-	popr bx
-	push 4
-	popr cx
+in
+popr cx
 
-	pushr ax
+push 1
+
+pushr cx
+
+
+here:
+mul
+OUT
+JEQ here
+
+OUT
+out out
+
 end

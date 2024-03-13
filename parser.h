@@ -18,7 +18,7 @@ namespace cpu_emulator::parser {
     struct syntax_error : public std::exception {
         syntax_error() : std::exception() {};
 
-        const char *what() const noexcept override {
+        [[nodiscard]] const char *what() const noexcept override {
             return "syntax error";
         }
     };
@@ -66,8 +66,8 @@ namespace cpu_emulator::parser {
     template<TemplateCommand Command>
     class CommandWithValueBuilder : public ICommandBuilder {
     private:
-        std::regex value_regex_ = std::regex("[-+]?[0-9]+");
         int value_ = 0;
+        std::regex value_regex_ = std::regex("[-+]?[0-9]+");
     public:
         CommandWithValueBuilder() = default;
 
@@ -112,7 +112,7 @@ namespace cpu_emulator::parser {
     class CommandWithLabelBuilder : public ICommandBuilder {
     private:
         std::string label_;
-        std::regex label_regex_ = std::regex("[a-zA-Z_][a-zA-Z0-9_]*");
+        std::regex label_regex_ = std::regex("[a-zA-Z_][a-zA-Z0-9_]*[:]?");
     public:
         CommandWithLabelBuilder() = default;
 
@@ -138,17 +138,32 @@ namespace cpu_emulator::parser {
 //        std::istream_iterator<std::string> input_;
         std::smatch last_match_;
         std::vector<CommandRegex> command_regex_ = {
-                {std::make_unique<CommandBuilder<commands::Begin>>(),             std::regex("BEGIN|BEG|begin|beg")},
-                {std::make_unique<CommandBuilder<commands::End>>(),               std::regex("END|end")},
-                {std::make_unique<CommandWithValueBuilder<commands::Push>>(),     std::regex("PUSH|push")},
-                {std::make_unique<CommandBuilder<commands::Pop>>(),               std::regex("POP|pop")},
-                {std::make_unique<CommandWithRegisterBuilder<commands::Pushr>>(), std::regex("PUSHR|pushr")},
-                {std::make_unique<CommandWithRegisterBuilder<commands::Popr>>(),  std::regex("POPR|popr")}
-
+                {std::make_shared<CommandBuilder<commands::Begin>>(),             std::regex("BEGIN|BEG|begin|beg")},
+                {std::make_shared<CommandBuilder<commands::End>>(),               std::regex("END|end")},
+                {std::make_shared<CommandWithValueBuilder<commands::Push>>(),     std::regex("PUSH|push")},
+                {std::make_shared<CommandBuilder<commands::Pop>>(),               std::regex("POP|pop")},
+                {std::make_shared<CommandWithRegisterBuilder<commands::Pushr>>(), std::regex("PUSHR|pushr")},
+                {std::make_shared<CommandWithRegisterBuilder<commands::Popr>>(),  std::regex("POPR|popr")},
+                {std::make_shared<CommandBuilder<commands::In>>(),  std::regex("IN|in")},
+                {std::make_shared<CommandBuilder<commands::Out>>(),  std::regex("OUT|out")},
+                {std::make_shared<CommandBuilder<commands::Add>>(),  std::regex("ADD|add")},
+                {std::make_shared<CommandBuilder<commands::Sub>>(),  std::regex("SUB|sub")},
+                {std::make_shared<CommandBuilder<commands::Mul>>(),  std::regex("MUL|mul")},
+                {std::make_shared<CommandBuilder<commands::Div>>(),  std::regex("DIV|div")},
+                {std::make_shared<CommandBuilder<commands::Div>>(),  std::regex("DIV|div")},
+                {std::make_shared<CommandBuilder<commands::Div>>(),  std::regex("DIV|div")},
+//                {std::make_shared<CommandWithLabelBuilder<commands::Label>>(),  std::regex("[a-zA-Z_][a-zA-Z0-9_]*:")},
+                {std::make_shared<CommandWithLabelBuilder<commands::Jmp>>(),  std::regex("JMP|jmp")},
+                {std::make_shared<CommandWithLabelBuilder<commands::Jeq>>(),  std::regex("JEQ|jeq")},
+                {std::make_shared<CommandWithLabelBuilder<commands::Jne>>(),  std::regex("JNE|jne")},
+                {std::make_shared<CommandWithLabelBuilder<commands::Ja>>(),  std::regex("JA|ja")},
+                {std::make_shared<CommandWithLabelBuilder<commands::Jae>>(),  std::regex("JAE|jae")},
+                {std::make_shared<CommandWithLabelBuilder<commands::Jb>>(),  std::regex("JB|jb")},
+                {std::make_shared<CommandWithLabelBuilder<commands::Jbe>>(),  std::regex("JBE|jbe")},
         };
 //        std::regex value_regex_ = std::regex("[-+]?[0-9]+");
 //        std::regex register_regex_ = std::regex("[a-hA-H][xX]");
-//        std::regex label_regex_ = std::regex("[a-zA-Z_][a-zA-Z0-9_]*");
+        std::regex label_regex_ = std::regex("[a-zA-Z_][a-zA-Z0-9_]*:");
 
     public :
         explicit Parser(std::ifstream &);
