@@ -1,6 +1,7 @@
 #include "commands.h"
 #include "iostream"
 #include <bitset>
+#include <utility>
 
 
 namespace cpu_emulator::commands {
@@ -94,11 +95,13 @@ namespace cpu_emulator::commands {
     void Add::DoIt(State& state) {
         if (state.run == Execution::NOT_STARTED) return;
 
-        auto top = state.stack.pop();
-        auto sum = top + state.stack.top();
+//        auto top = state.stack.pop();
+//        auto sum = top + state.stack.top();
+//
+//        state.stack.push(top);
+//        state.stack.push(sum);
 
-        state.stack.push(top);
-        state.stack.push(sum);
+state.stack.push(state.stack.pop() + state.stack.pop());
     }
     //------------------------------------
 
@@ -106,11 +109,12 @@ namespace cpu_emulator::commands {
     void Sub::DoIt(State& state) {
         if (state.run == Execution::NOT_STARTED) return;
 
-        auto top = state.stack.pop();
-        auto diff = top - state.stack.top();
-
-        state.stack.push(top);
-        state.stack.push(diff);
+//        auto top = state.stack.pop();
+//        auto diff = top - state.stack.top();
+//
+//        state.stack.push(top);
+//        state.stack.push(diff);
+state.stack.push(state.stack.pop() - state.stack.pop());
     }
     //------------------------------------
 
@@ -118,11 +122,12 @@ namespace cpu_emulator::commands {
     void Mul::DoIt(State& state) {
         if (state.run == Execution::NOT_STARTED) return;
 
-        auto top = state.stack.pop();
-        auto prod = top * state.stack.top();
-
-        state.stack.push(top);
-        state.stack.push(prod);
+//        auto top = state.stack.pop();
+//        auto prod = top * state.stack.top();
+//
+//        state.stack.push(top);
+//        state.stack.push(prod);
+state.stack.push(state.stack.pop() * state.stack.pop());
     }
     //------------------------------------
 
@@ -131,11 +136,12 @@ namespace cpu_emulator::commands {
     void Div::DoIt(State& state) {
         if (state.run == Execution::NOT_STARTED) return;
 
-        auto top = state.stack.pop();
-        auto quot = top / state.stack.top();
-
-        state.stack.push(top);
-        state.stack.push(quot);
+//        auto top = state.stack.pop();
+//        auto quot = top / state.stack.top();
+//
+//        state.stack.push(top);
+//        state.stack.push(quot);
+state.stack.push(state.stack.pop() / state.stack.pop());
     }
     //------------------------------------
 
@@ -143,16 +149,21 @@ namespace cpu_emulator::commands {
             : label_(label.begin(), label.end() - 1) {}
 
     void Label::DoIt(State& state) {
+        if (state.run == Execution::NOT_STARTED) return;
+
         state.labels[label_] = state.pivot;
     }
 
-    Jmp::Jmp(const std::string &label): label_(label) {}
+    Jmp::Jmp(std::string label): label_(std::move(label)) {}
 
     void Jmp::Jump(State& state) {
+        if (state.run == Execution::NOT_STARTED) return;
+
+
         if (!state.labels.contains(label_))
             throw undefined_label_error();
 
-        state.pivot = state.labels[label_];
+        state.pivot = state.labels[label_]-1;
     }
     void Jmp::DoIt(State& state) {
         Jump(state);
@@ -162,6 +173,8 @@ namespace cpu_emulator::commands {
             : Jmp(label) {}
 
     void Jeq::DoIt(State& state) {
+        if (state.run == Execution::NOT_STARTED) return;
+
         auto top = state.stack.pop();
         if (top == state.stack.top()){
             Jump(state);
@@ -173,6 +186,8 @@ namespace cpu_emulator::commands {
             : Jmp(label) {}
 
     void Jne::DoIt(State &state) {
+        if (state.run == Execution::NOT_STARTED) return;
+
         auto top = state.stack.pop();
         if (top != state.stack.top()){
             Jump(state);
@@ -184,6 +199,8 @@ namespace cpu_emulator::commands {
             : Jmp(label) {}
 
     void Ja::DoIt(State &state) {
+        if (state.run == Execution::NOT_STARTED) return;
+
         auto top = state.stack.pop();
         if (top > state.stack.top()){
             Jump(state);
@@ -195,6 +212,8 @@ namespace cpu_emulator::commands {
             : Jmp(label) {}
 
     void Jae::DoIt(State &state) {
+        if (state.run == Execution::NOT_STARTED) return;
+
         auto top = state.stack.pop();
         if (top >= state.stack.top()){
             Jump(state);
@@ -206,6 +225,8 @@ namespace cpu_emulator::commands {
             : Jmp(label) {}
 
     void Jb::DoIt(State &state) {
+        if (state.run == Execution::NOT_STARTED) return;
+
         auto top = state.stack.pop();
         if (top < state.stack.top()){
             Jump(state);
@@ -217,6 +238,8 @@ namespace cpu_emulator::commands {
             : Jmp(label) {}
 
     void Jbe::DoIt(State &state) {
+        if (state.run == Execution::NOT_STARTED) return;
+
         auto top = state.stack.pop();
         if (top <= state.stack.top()){
             Jump(state);
@@ -228,6 +251,18 @@ namespace cpu_emulator::commands {
             : Jmp(label) {}
 
     void Call::DoIt(State &state) {
+        if (state.run == Execution::NOT_STARTED) return;
 
+        state.previous_size.push(state.stack.size());
+        state.previous_sp.push(state.pivot);
+        Jump(state);
+    }
+
+    void Ret::DoIt(State &state) {
+        if (state.run == Execution::NOT_STARTED) return;
+
+
+        state.pivot =  state.previous_sp.pop();
+        state.stack.resize(state.previous_size.pop());
     }
 }

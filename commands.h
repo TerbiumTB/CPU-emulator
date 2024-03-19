@@ -151,7 +151,7 @@ namespace cpu_emulator::commands {
         void Jump(State &);
 
     public:
-        explicit Jmp(const std::string &);
+        explicit Jmp(std::string );
 //        virtual std::vector<bool> Serialize() override;
 
 

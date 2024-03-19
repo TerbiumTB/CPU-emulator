@@ -1,18 +1,31 @@
+compute:
+	push 4
+	pushr ax
+	pushr cx
+
+	mul
+	mul
+    pushr bx
+    pushr bx
+    mul
+	sub
+	popr ax
+	pushr ax
+	push 0
+	jae return
+	push -1
+	popr ax
+return:
+	ret
 beg
-in
-popr cx
+	push 2
+	popr ax
+	push 3
+	popr bx
+	push 3
+	popr cx
 
-push 1
+	call compute
 
-pushr cx
-
-
-here:
-mul
-OUT
-JEQ here
-
-OUT
-out out
-
+	out
 end

@@ -3,15 +3,20 @@
 #include <utility>
 
 namespace cpu_emulator::preprocessor {
-    Preprocessor::Preprocessor(std::ifstream & input_file) :
-             parser_(input_file) {}
 
-    std::vector<std::shared_ptr<commands::ICommand>> Preprocessor::Process() {
+    void Preprocessor::Process(std::ifstream & input_file) {
+        auto parser = parser::Parser(input_file);
 
-        while(!parser_.IsEmpty()){
-            commands_.push_back(parser_.ParseCommand());
+        while(!parser.IsEmpty()){
+            try{
+                commands_.push_back(parser.ParseCommand());
+            }
+            catch (parser::syntax_error &e){
+                labels_[parser.ParseLabel()] = commands_.size();
+            }
+
         }
 
-        return commands_;
+//        return commands_;
     }
 }

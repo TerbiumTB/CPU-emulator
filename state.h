@@ -27,11 +27,7 @@ namespace cpu_emulator {
         cx,
         dx,
         sp,
-        bp,
-        ex,
-        fx,
-        gx,
-        hx
+        bp
     };
     enum class Execution{
         NOT_STARTED,
@@ -51,7 +47,8 @@ namespace cpu_emulator {
         };
         std::map<std::string, int> labels;
         Execution run = Execution::NOT_STARTED;
-        int stack_pointer;
+        generics::stack<int>  previous_sp;
+        generics::stack<int>  previous_size;
         int pivot = 0;
     };
 }

@@ -32,7 +32,5 @@ beg
 
     pushr bx
     pushr ax
-
-
     jne next
 end

@@ -15,14 +15,22 @@ namespace generics {
         int capacity_;
         int head_;
 
+
+
+    public:
+
         void resize(int n) {
+            if (n <= head_){
+                head_ = n;
+                return;
+            }
+
             T *ptr = new T[n];
             std::copy(stack_, stack_ + capacity_, ptr);
             delete [] stack_;
             stack_ = ptr;
         }
 
-    public:
         explicit stack(int size = 32) : stack_(new T[size]) {
             capacity_ = size;
             head_ = -1;
@@ -100,12 +108,12 @@ namespace generics {
             return stack_[head_ + 1];
         }
 
-        void popn(int n) {
-            if (head_ - n < 0){
-                throw empty_stack_access();
-            }
-            head_ -= n;
-        }
+//        void popn(int n) {
+//            if (head_ - n < 0){
+//                throw empty_stack_access();
+//            }
+//            head_ -= n;
+//        }
     };
 }
 #endif //CPU_EMULATOR_STACK_H

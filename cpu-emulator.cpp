@@ -16,7 +16,9 @@ namespace cpu_emulator {
             throw std::ios_base::failure("program file doesn't exist");
         }
 
-        auto commands = preprocessor::Preprocessor(input_file_).Process();
+        preprocessor_.Process(input_file_);
+        state_.labels = preprocessor_.getLabels();
+        auto commands = preprocessor_.getCommands();
 
         while (state_.pivot < commands.size()){
             commands[state_.pivot]->DoIt(state_);

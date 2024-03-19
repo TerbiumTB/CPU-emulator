@@ -1,0 +1,37 @@
+fact:
+
+pushr ax
+pushr bx
+
+mul
+popr bx
+
+
+push 1
+pushr ax
+
+
+jeq return
+
+sub
+popr ax
+
+call fact
+
+return:
+ret
+
+beg
+push 1
+push 1
+popr cx
+popr bx
+
+in
+popr ax
+
+call fact
+
+pushr bx
+out
+end

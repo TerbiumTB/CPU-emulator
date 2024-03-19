@@ -1,15 +1,39 @@
 #include "command_factory.h"
 
 namespace cpu_emulator::command_factory {
+
+    template<class Arg>
+    std::shared_ptr<commands::ICommand> ICommandFactory<Arg>::create(Arg arg) {
+        return {};
+    }
+
+    std::shared_ptr<commands::ICommand> ICommandFactory<void>::create() {
+        return {};
+    }
+
     template<TemplateCommand Command, class Arg>
-    std::shared_ptr<commands::ICommand> CommandFactory::create(Arg arg) {
-        return std::make_shared<commands::ICommand>(Command(arg));
+    std::shared_ptr<commands::ICommand> CommandFactory<Command, Arg>::create(Arg arg) {
+        return std::make_shared<Command>(Command(arg));
     }
 
     template<TemplateCommand Command>
-    std::shared_ptr<commands::ICommand> CommandFactory::create() {
-        return std::make_shared<commands::ICommand>(Command());
+    std::shared_ptr<commands::ICommand> CommandFactory<Command, void>::create() {
+        return std::make_shared<Command>();
     }
+
+//    template<TemplateCommand Command>
+//    std::shared_ptr<commands::ICommand> CommandFactory<Command, void>::create() {
+//        return std::make_shared<Command>();
+//    }
+//    template<TemplateCommand Command, class Arg>
+//    std::shared_ptr<commands::ICommand> CommandFactory::create(Arg arg) {
+//        return std::make_shared<commands::ICommand>(Command(arg));
+//    }
+//
+//    template<TemplateCommand Command>
+//    std::shared_ptr<commands::ICommand> CommandFactory::create() {
+//        return std::make_shared<commands::ICommand>(Command());
+//    }
 
 //    template<class Command>
 //    std::shared_ptr<commands::ICommand> CommandFactory::create<Command, void>() {

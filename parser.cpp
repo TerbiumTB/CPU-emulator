@@ -3,51 +3,72 @@
 #include <vector>
 #include <memory>
 #include <type_traits>
+#include <iostream>
 
 #include "parser.h"
 
 namespace cpu_emulator::parser {
-    template<class T>
-    Parser<T>::Parser(std::ifstream &input_file) {
+    Parser::Parser(std::ifstream &input_file) {
         input_ = file_iterator(input_file);
     }
 
-    template<class T>
-    std::shared_ptr<commands::ICommand>
-    Parser<T>::ParseCommand() {
-//        command_factory::CommandFactory factory;
-//        auto x = commands::Begin();
-        for (auto &reg: command_regex_) {
-            if (!std::regex_match(*input_, reg.regex))
-                continue;
-
-            if (reg.args != Args::NAME)
-                input_++;
-
-            switch (reg.args) {
-                case Args::NONE:
-//                    return dynamic_cast<command_factory::CommandFactory<commands::ICommand> &>((*reg.factory));
-                    return commands_map.at(reg.command)(); // factory.create<decltype()>() ;
-                case Args::VALUE:
-//                    command_factory::CommandFactory<decltype(*reg.command), int>()
-//                    return decltype(reg.command){(ParseValue())};
-                    return commands_map.at(reg.command)(
-                            ParseValue()); // factory.create<decltype(reg.command)>(ParseValue());
-                case Args::REGISTER:
-                    return commands_map.at(reg.command)(
-                            ParseRegister()); // factory.create<decltype(reg.command)>(ParseRegister());
-                default:
-                    return commands_map.at(reg.command)(ParseLabel());
-//                    return factory.create<decltype(reg.command)>(ParseLabel());
-            }
-
-        }
-
-        throw syntax_error();
+    template<class Arg>
+    std::shared_ptr<commands::ICommand> ICommandFactory<Arg>::create(Arg arg) {
+        return {};
     }
 
-    template<class T>
-    int Parser<T>::ParseValue() {
+    std::shared_ptr<commands::ICommand> ICommandFactory<void>::create() {
+        return {};
+    }
+
+    template<TemplateCommand Command, class Arg>
+    std::shared_ptr<commands::ICommand> CommandFactory<Command, Arg>::create(Arg arg) {
+        return std::make_shared<Command>(Command(arg));
+    }
+
+    template<TemplateCommand Command>
+    std::shared_ptr<commands::ICommand> CommandFactory<Command, void>::create() {
+        return std::make_shared<Command>();
+    }
+
+    std::shared_ptr<commands::ICommand>
+    Parser::ParseCommand() {
+//        auto x = command_factory::CommandFactory<commands::Label, std::string>();
+        for(auto &dir: director_){
+            if (std::regex_match(*input_, dir.regex)){
+                input_++;
+                return dir.factory->create();
+            }
+        }
+
+        for (auto &dir: director_with_value_){
+            if (std::regex_match(*input_, dir.regex)){
+                input_++;
+                return dir.factory->create(ParseValue());
+            }
+        }
+
+        for (auto &dir: director_with_register_){
+            if (std::regex_match(*input_, dir.regex)){
+                input_++;
+                return dir.factory->create(ParseRegister());
+            }
+        }
+
+        for (auto &dir: director_with_label_){
+            if (std::regex_match(*input_, dir.regex)){
+                if (!dir.declaration)
+                    input_++;
+
+                return dir.factory->create(ParseLabel());
+            }
+        }
+        std::cout << *input_ << std::endl;
+        throw syntax_error();
+
+    }
+
+    int Parser::ParseValue() {
         if (std::regex_match(*input_, value_regex_)) {
             auto value = std::stoi(*input_);
             input_++;
@@ -56,8 +77,7 @@ namespace cpu_emulator::parser {
         throw syntax_error();
     }
 
-    template<class T>
-    Register Parser<T>::ParseRegister() {
+    Register Parser::ParseRegister() {
         for (auto &[reg, match]: register_regex_)
             if ((std::regex_match(*input_, match))) {
                 input_++;
@@ -66,18 +86,20 @@ namespace cpu_emulator::parser {
         throw syntax_error();
     }
 
-    template<class T>
-    std::string Parser<T>::ParseLabel() {
+    std::string Parser::ParseLabel() {
         if (std::regex_match(*input_, label_regex_)) {
             auto label = *input_;
             input_++;
+            if (label.back() == ':'){
+                label =  label.substr(0, label.size() - 1);
+            }
+
             return label;
         }
         throw syntax_error();
     }
 
-    template<class T>
-    bool Parser<T>::IsEmpty() {
+    bool Parser::IsEmpty() {
         return input_ == std::istream_iterator<std::string>();
     }
 }

@@ -19,6 +19,7 @@ namespace cpu_emulator{
         std::ifstream input_file_;
         std::string input_file_name_;
         State state_;
+        preprocessor::Preprocessor preprocessor_;
 
     public:
         explicit CpuEmulator(std::string );
