@@ -32,7 +32,6 @@ namespace generics {
             delete[] stack_;
         }
 
-        //compiler doesn't use this one, though clang-tidy claims it should
         stack(stack &&other) noexcept: stack_(std::exchange(other.stack_, nullptr)) {
             capacity_ = other.capacity_;
             head_ = other.head_;
@@ -99,6 +98,13 @@ namespace generics {
             }
             head_--;
             return stack_[head_ + 1];
+        }
+
+        void popn(int n) {
+            if (head_ - n < 0){
+                throw empty_stack_access();
+            }
+            head_ -= n;
         }
     };
 }

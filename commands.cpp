@@ -1,248 +1,233 @@
 #include "commands.h"
 #include "iostream"
+#include <bitset>
 
 
 namespace cpu_emulator::commands {
-    ICommand::ICommand(std::shared_ptr<State> &state)
-            : state_(state) {}
-
 
     //Begin------------------------------------
-    Begin::Begin(std::shared_ptr<State> &state)
-            : ICommand(state) {}
-
-
-    void Begin::DoIt() {
-        state_->run = Execution::STARTED;
+    void Begin::DoIt(State& state) {
+        state.run = Execution::STARTED;
     }
     //------------------------------------
 
     //End------------------------------------
-    End::End(std::shared_ptr<State> &state)
-            : ICommand(state) {}
-
-    void End::DoIt() {
-        state_->run = Execution::ENDED;
+    void End::DoIt(State& state) {
+        state.run = Execution::ENDED;
     }
     //------------------------------------
 
     //Push------------------------------------
-    Push::Push(std::shared_ptr<State> &state, int value) : ICommand(state) {
+//    std::vector<bool> Push::Serialize() {
+//        auto x = std::bitset<32>(value_);
+//        x[0];
+//        for (auto const i: x){
+//
+//        }
+//        std::vector<bool> serial = {0,0,0,0,1};
+//        return {1,1,1,1,1};
+//    }
+    Push::Push(int value){
         value_ = value;
     }
 
-    void Push::DoIt() {
-        if (state_->run == Execution::NOT_STARTED) return;
+    void Push::DoIt(State& state) {
+        if (state.run == Execution::NOT_STARTED) return;
 
-        state_->stack.push(value_);
+        state.stack.push(value_);
     }
     //------------------------------------
 
 
     //Pop------------------------------------
-    Pop::Pop(std::shared_ptr<State> &state)
-            : ICommand(state) {}
+    void Pop::DoIt(State& state) {
+        if (state.run == Execution::NOT_STARTED) return;
 
-    void Pop::DoIt() {
-        if (state_->run == Execution::NOT_STARTED) return;
-
-        state_->stack.pop();
+        state.stack.pop();
     }
     //------------------------------------
 
 
     //Pushr------------------------------------
-    Pushr::Pushr(std::shared_ptr<State> &state, Register reg)
-            : ICommand(state), reg_(reg) {}
+    Pushr::Pushr(Register reg)
+            : reg_(reg) {}
 
-    void Pushr::DoIt() {
-        if (state_->run == Execution::NOT_STARTED) return;
+    void Pushr::DoIt(State& state) {
+        if (state.run == Execution::NOT_STARTED) return;
 
-        state_->stack.push(state_->registers.at(reg_));
+        state.stack.push(state.registers.at(reg_));
     }
     //------------------------------------
 
 
     //Popr------------------------------------
-    Popr::Popr(std::shared_ptr<State> &state, Register reg)
-            : ICommand(state), reg_(reg) {}
+    Popr::Popr(Register reg)
+            : reg_(reg) {}
+    void Popr::DoIt(State& state) {
+        if (state.run == Execution::NOT_STARTED) return;
 
-    void Popr::DoIt() {
-        if (state_->run == Execution::NOT_STARTED) return;
-
-        state_->registers.at(reg_) = state_->stack.pop();
+        state.registers.at(reg_) = state.stack.pop();
     }
     //------------------------------------
 
     //In------------------------------------
-    In::In(std::shared_ptr<State> &state)
-            : ICommand(state) {}
-
-    void In::DoIt() {
-        if (state_->run == Execution::NOT_STARTED) return;
+    void In::DoIt(State& state) {
+        if (state.run == Execution::NOT_STARTED) return;
 
         int value;
         std::cout << "Input a value: ";
         std::cin >> value;
 
-        state_->stack.push(value);
+        state.stack.push(value);
     }
     //------------------------------------
 
     //Out------------------------------------
-    Out::Out(std::shared_ptr<State> &state)
-            : ICommand(state) {}
+    void Out::DoIt(State& state) {
+        if (state.run == Execution::NOT_STARTED) return;
 
-    void Out::DoIt() {
-        if (state_->run == Execution::NOT_STARTED) return;
-
-        std::cout << state_->stack.pop() << std::endl;
+        std::cout << state.stack.pop() << std::endl;
     }
     //------------------------------------
 
     //Add------------------------------------
-    Add::Add(std::shared_ptr<State> &state)
-            : ICommand(state) {}
+    void Add::DoIt(State& state) {
+        if (state.run == Execution::NOT_STARTED) return;
 
-    void Add::DoIt() {
-        if (state_->run == Execution::NOT_STARTED) return;
+        auto top = state.stack.pop();
+        auto sum = top + state.stack.top();
 
-        auto top = state_->stack.pop();
-        auto sum = top + state_->stack.top();
-
-        state_->stack.push(top);
-        state_->stack.push(sum);
+        state.stack.push(top);
+        state.stack.push(sum);
     }
     //------------------------------------
 
     //Sub------------------------------------
-    Sub::Sub(std::shared_ptr<State> &state)
-            : ICommand(state) {}
+    void Sub::DoIt(State& state) {
+        if (state.run == Execution::NOT_STARTED) return;
 
-    void Sub::DoIt() {
-        if (state_->run == Execution::NOT_STARTED) return;
+        auto top = state.stack.pop();
+        auto diff = top - state.stack.top();
 
-        auto top = state_->stack.pop();
-        auto diff = top - state_->stack.top();
-
-        state_->stack.push(top);
-        state_->stack.push(diff);
+        state.stack.push(top);
+        state.stack.push(diff);
     }
     //------------------------------------
 
     //Mul------------------------------------
-    Mul::Mul(std::shared_ptr<State> &state)
-            : ICommand(state) {}
+    void Mul::DoIt(State& state) {
+        if (state.run == Execution::NOT_STARTED) return;
 
-    void Mul::DoIt() {
-        if (state_->run == Execution::NOT_STARTED) return;
+        auto top = state.stack.pop();
+        auto prod = top * state.stack.top();
 
-        auto top = state_->stack.pop();
-        auto prod = top * state_->stack.top();
-
-        state_->stack.push(top);
-        state_->stack.push(prod);
+        state.stack.push(top);
+        state.stack.push(prod);
     }
     //------------------------------------
 
     //Div------------------------------------
-    Div::Div(std::shared_ptr<State> &state)
-            : ICommand(state) {}
 
-    void Div::DoIt() {
-        if (state_->run == Execution::NOT_STARTED) return;
+    void Div::DoIt(State& state) {
+        if (state.run == Execution::NOT_STARTED) return;
 
-        auto top = state_->stack.pop();
-        auto quot = top / state_->stack.top();
+        auto top = state.stack.pop();
+        auto quot = top / state.stack.top();
 
-        state_->stack.push(top);
-        state_->stack.push(quot);
+        state.stack.push(top);
+        state.stack.push(quot);
     }
     //------------------------------------
 
-    Label::Label(std::shared_ptr<State> &state, const std::string &label)
-            : ICommand(state), label_(label.begin(), label.end() - 1) {}
+    Label::Label(const std::string &label)
+            : label_(label.begin(), label.end() - 1) {}
 
-    void Label::DoIt() {
-        state_->labels[label_] = state_->pivot;
+    void Label::DoIt(State& state) {
+        state.labels[label_] = state.pivot;
     }
 
-    Jmp::Jmp(std::shared_ptr<State> &state, const std::string &label)
-            : ICommand(state), label_(label) {}
+    Jmp::Jmp(const std::string &label): label_(label) {}
 
-    void Jmp::Jump() {
-        if (!state_->labels.contains(label_))
+    void Jmp::Jump(State& state) {
+        if (!state.labels.contains(label_))
             throw undefined_label_error();
 
-        state_->pivot = state_->labels[label_];
+        state.pivot = state.labels[label_];
     }
-    void Jmp::DoIt() {
-        Jump();
+    void Jmp::DoIt(State& state) {
+        Jump(state);
     }
 
-    Jeq::Jeq(std::shared_ptr<State> &state, const std::string &label)
-            : Jmp(state, label) {}
+    Jeq::Jeq(const std::string &label)
+            : Jmp(label) {}
 
-    void Jeq::DoIt() {
-        auto top = state_->stack.pop();
-        if (top == state_->stack.top()){
-            Jump();
+    void Jeq::DoIt(State& state) {
+        auto top = state.stack.pop();
+        if (top == state.stack.top()){
+            Jump(state);
         }
-        state_->stack.push(top);
+        state.stack.push(top);
     }
 
-    Jne::Jne(std::shared_ptr<State> &state, const std::string &label)
-            : Jmp(state, label) {}
+    Jne::Jne(const std::string &label)
+            : Jmp(label) {}
 
-    void Jne::DoIt() {
-        auto top = state_->stack.pop();
-        if (top != state_->stack.top()){
-            Jump();
+    void Jne::DoIt(State &state) {
+        auto top = state.stack.pop();
+        if (top != state.stack.top()){
+            Jump(state);
         }
-        state_->stack.push(top);
+        state.stack.push(top);
     }
 
-    Ja::Ja(std::shared_ptr<State> &state, const std::string &label)
-            : Jmp(state, label) {}
+    Ja::Ja(const std::string &label)
+            : Jmp(label) {}
 
-    void Ja::DoIt() {
-        auto top = state_->stack.pop();
-        if (top > state_->stack.top()){
-            Jump();
+    void Ja::DoIt(State &state) {
+        auto top = state.stack.pop();
+        if (top > state.stack.top()){
+            Jump(state);
         }
-        state_->stack.push(top);
+        state.stack.push(top);
     }
 
-    Jae::Jae(std::shared_ptr<State> &state, const std::string &label)
-            : Jmp(state, label) {}
+    Jae::Jae(const std::string &label)
+            : Jmp(label) {}
 
-    void Jae::DoIt() {
-        auto top = state_->stack.pop();
-        if (top >= state_->stack.top()){
-            Jump();
+    void Jae::DoIt(State &state) {
+        auto top = state.stack.pop();
+        if (top >= state.stack.top()){
+            Jump(state);
         }
-        state_->stack.push(top);
+        state.stack.push(top);
     }
 
-    Jb::Jb(std::shared_ptr<State> &state, const std::string &label)
-            : Jmp(state, label) {}
+    Jb::Jb(const std::string &label)
+            : Jmp(label) {}
 
-    void Jb::DoIt() {
-        auto top = state_->stack.pop();
-        if (top < state_->stack.top()){
-            Jump();
+    void Jb::DoIt(State &state) {
+        auto top = state.stack.pop();
+        if (top < state.stack.top()){
+            Jump(state);
         }
-        state_->stack.push(top);
+        state.stack.push(top);
     }
 
-    Jbe::Jbe(std::shared_ptr<State> &state, const std::string &label)
-            : Jmp(state, label) {}
+    Jbe::Jbe(const std::string &label)
+            : Jmp(label) {}
 
-    void Jbe::DoIt() {
-        auto top = state_->stack.pop();
-        if (top <= state_->stack.top()){
-            Jump();
+    void Jbe::DoIt(State &state) {
+        auto top = state.stack.pop();
+        if (top <= state.stack.top()){
+            Jump(state);
         }
-        state_->stack.push(top);
+        state.stack.push(top);
+    }
+
+    Call::Call(const std::string &label)
+            : Jmp(label) {}
+
+    void Call::DoIt(State &state) {
+
     }
 }

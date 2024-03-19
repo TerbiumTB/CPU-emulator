@@ -1,7 +1,10 @@
 #ifndef CPU_EMULATOR_COMMANDS_H
 #define CPU_EMULATOR_COMMANDS_H
 
+#include <stdexcept>
+#include <memory>
 #include "state.h"
+#include <vector>
 
 namespace cpu_emulator::commands {
     struct undefined_label_error : public std::invalid_argument {
@@ -9,165 +12,222 @@ namespace cpu_emulator::commands {
     };
 
     class ICommand {
-    protected:
-        std::shared_ptr<State> state_;
     public :
-        explicit ICommand(std::shared_ptr<State> &);
-
-        virtual void DoIt() {};
-
-        virtual ~ICommand() = default;
+//        ICommand() = default;
+//        virtual ~ICommand() = default;
+        virtual void DoIt(State &) {};
     };
+
+
 
     class Begin : public ICommand {
     public:
-        explicit Begin(std::shared_ptr<State> &);
-
-        void DoIt() override;
+//        Begin() = default;
+//        virtual std::vector<bool> Serialize() override;
+        void DoIt(State &) override;
     };
 
     class End : public ICommand {
     public:
-        explicit End(std::shared_ptr<State> &);
+//        virtual std::vector<bool> Serialize() override;
 
-        void DoIt() override;
+//        End() = default;
+
+        void DoIt(State &) override;
     };
 
     class Push : public ICommand {
     private:
         int value_;
     public:
-        Push(std::shared_ptr<State> &, int value);
+//        virtual std::vector<bool> Serialize() override;
 
-        void DoIt() override;
+        explicit Push(int value);
+
+        void DoIt(State &) override;
     };
 
     class Pop : public ICommand {
     public:
-        explicit Pop(std::shared_ptr<State> &);
+//        virtual std::vector<bool> Serialize() override;
 
-        void DoIt() override;
+//        Pop() = default;
+
+        void DoIt(State &) override;
     };
 
     class Pushr : public ICommand {
     private:
         Register reg_;
     public:
-        Pushr(std::shared_ptr<State> &, Register);
+        explicit Pushr(Register);
 
-        void DoIt() override;
+//        virtual std::vector<bool> Serialize() override;
+
+
+        void DoIt(State &) override;
     };
 
     class Popr : public ICommand {
     private:
         Register reg_;
     public:
-        Popr(std::shared_ptr<State> &, Register);
+        explicit Popr(Register);
+//        virtual std::vector<bool> Serialize() override;
 
-        void DoIt() override;
+
+        void DoIt(State &) override;
     };
 
     class In : public ICommand {
     public:
-        explicit In(std::shared_ptr<State> &);
+//        In() = default;
+//        virtual std::vector<bool> Serialize() override;
 
-        void DoIt() override;
+
+        void DoIt(State &) override;
     };
 
     class Out : public ICommand {
     public:
-        explicit Out(std::shared_ptr<State> &);
+//        Out() = default;
+//        virtual std::vector<bool> Serialize() override;
 
-        void DoIt() override;
+
+        void DoIt(State &) override;
     };
 
     class Add : public ICommand {
     public:
-        explicit Add(std::shared_ptr<State> &);
+//        Add() = default;
+//        virtual std::vector<bool> Serialize() override;
 
-        void DoIt() override;
+
+        void DoIt(State &) override;
     };
 
     class Sub : public ICommand {
     public:
-        explicit Sub(std::shared_ptr<State> &);
+//        Sub() = default;
+//        virtual std::vector<bool> Serialize() override;
 
-        void DoIt() override;
+
+        void DoIt(State &) override;
     };
 
     class Mul : public ICommand {
     public:
-        explicit Mul(std::shared_ptr<State> &);
+//        Mul() = default;
+//        virtual std::vector<bool> Serialize() override;
 
-        void DoIt() override;
+
+        void DoIt(State &) override;
     };
 
     class Div : public ICommand {
     public:
-        explicit Div(std::shared_ptr<State> &);
+//        Div() = default;
+//        virtual std::vector<bool> Serialize() override;
 
-        void DoIt() override;
+
+        void DoIt(State &) override;
     };
 
     class Label : public ICommand {
     private:
         std::string label_;
     public:
-        Label(std::shared_ptr<State> &, const std::string &);
+        explicit Label(const std::string &);
+//        virtual std::vector<bool> Serialize() override;
 
-        void DoIt() override;
+
+        void DoIt(State &) override;
     };
 
     class Jmp : public ICommand {
     protected:
         std::string label_;
-        void Jump();
-    public:
-        Jmp(std::shared_ptr<State> &, const std::string &);
 
-        void DoIt() override;
+        void Jump(State &);
+
+    public:
+        explicit Jmp(const std::string &);
+//        virtual std::vector<bool> Serialize() override;
+
+
+        void DoIt(State &) override;
     };
 
     class Jeq : public Jmp {
     public:
-        Jeq(std::shared_ptr<State> &, const std::string &);
+        explicit Jeq(const std::string &);
+//        virtual std::vector<bool> Serialize() override;
 
-        void DoIt() override;
+
+        void DoIt(State &) override;
     };
 
     class Jne : public Jmp {
     public:
-        Jne(std::shared_ptr<State> &, const std::string &);
+        explicit Jne(const std::string &);
+//        virtual std::vector<bool> Serialize() override;
 
-        void DoIt() override;
+
+        void DoIt(State &) override;
     };
 
     class Ja : public Jmp {
     public:
-        Ja(std::shared_ptr<State> &, const std::string &);
+        explicit Ja(const std::string &);
+//        virtual std::vector<bool> Serialize() override;
 
-        void DoIt() override;
+
+        void DoIt(State &) override;
     };
 
     class Jae : public Jmp {
     public:
-        Jae(std::shared_ptr<State> &, const std::string &);
+        explicit Jae(const std::string &);
+//        virtual std::vector<bool> Serialize() override;
 
-        void DoIt() override;
+
+        void DoIt(State &) override;
     };
 
     class Jb : public Jmp {
     public:
-        Jb(std::shared_ptr<State> &, const std::string &);
+        explicit Jb(const std::string &);
+//        virtual std::vector<bool> Serialize() override;
 
-        void DoIt() override;
+
+        void DoIt(State &) override;
     };
 
     class Jbe : public Jmp {
     public:
-        Jbe(std::shared_ptr<State> &, const std::string &);
+        explicit Jbe(const std::string &);
+//        virtual std::vector<bool> Serialize() override;
 
-        void DoIt() override;
+
+        void DoIt(State &) override;
+    };
+
+    class Call : public Jmp {
+    public:
+        explicit Call(const std::string &);
+//        virtual std::vector<bool> Serialize() override;
+
+
+        void DoIt(State &) override;
+    };
+
+    class Ret : public ICommand {
+    public:
+        Ret() = default;
+//        virtual std::vector<bool> Serialize() override;
+
+
+        void DoIt(State &) override;
     };
 
 }

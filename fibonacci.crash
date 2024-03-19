@@ -17,10 +17,10 @@ beg
     popr bx
 
     add
-    popr fx
-    pushr fx
+    popr dx
+    pushr dx
     out
-    pushr fx
+    pushr dx
 
     push 1
     pushr ax

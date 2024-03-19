@@ -3,14 +3,19 @@ project(cpu_emulator)
 
 set(CMAKE_CXX_STANDARD 20)
 
+configure_file("fibonacci.crash" "fibonacci.crash" COPYONLY)
+
 add_executable(cpu_emulator
         main.cpp
         cpu-emulator.cpp
         preprocessor.cpp
         parser.cpp
         commands.cpp
-        command_builder.cpp
-        command_builder.h)
+        serialization.cpp
+        serialization.h
+#        command_factory.cpp
+#        command_factory.h
+)
 
 include_directories(stack)
 include(FetchContent)
