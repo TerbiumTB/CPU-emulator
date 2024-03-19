@@ -16,10 +16,9 @@ namespace cpu_emulator::preprocessor{
     private:
         parser::Parser parser_;
         std::vector<std::shared_ptr<commands::ICommand>> commands_;
-        std::shared_ptr<State> state_;
 
     public:
-        Preprocessor(std::ifstream &, std::shared_ptr<State> &);
+        explicit Preprocessor(std::ifstream &);
         std::vector<std::shared_ptr<commands::ICommand>> Process();
 
     };

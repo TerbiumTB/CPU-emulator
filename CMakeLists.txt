@@ -9,8 +9,11 @@ add_executable(cpu_emulator
         preprocessor.cpp
         parser.cpp
         commands.cpp
-        command_builder.cpp
-        command_builder.h)
+        serialization.cpp
+        serialization.h
+        command_factory.cpp
+        command_factory.h
+)
 
 include_directories(stack)
 include(FetchContent)
