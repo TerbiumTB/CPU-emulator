@@ -32,8 +32,6 @@ namespace cpu_emulator::command_factory {
 //        template<class Args>
 //        std::shared_ptr<commands::ICommand> create(Args);
 
-
-
         std::shared_ptr<commands::ICommand> create(void);
         std::shared_ptr<commands::ICommand> create(int);
         std::shared_ptr<commands::ICommand> create(Register);

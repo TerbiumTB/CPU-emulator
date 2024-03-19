@@ -1,6 +1,8 @@
 #ifndef CPU_EMULATOR_COMMANDS_H
 #define CPU_EMULATOR_COMMANDS_H
 
+#include <stdexcept>
+#include <memory>
 #include "state.h"
 #include <vector>
 
@@ -12,8 +14,7 @@ namespace cpu_emulator::commands {
     class ICommand {
     public :
 //        ICommand() = default;
-        virtual ~ICommand() = default;
-
+//        virtual ~ICommand() = default;
         virtual void DoIt(State &) {};
     };
 
@@ -23,8 +24,6 @@ namespace cpu_emulator::commands {
     public:
 //        Begin() = default;
 //        virtual std::vector<bool> Serialize() override;
-
-
         void DoIt(State &) override;
     };
 

@@ -39,10 +39,57 @@ namespace cpu_emulator::parser {
         std::regex regex;
     };
 
+    enum class CommandNames {
+        BEGIN,
+        END,
+        PUSH,
+        POP,
+        PUSHR,
+        POPR,
+        IN,
+        OUT,
+        ADD,
+        SUB,
+        MUL,
+        DIV,
+        JMP,
+        JEQ,
+        JNE,
+        JA,
+        JAE,
+        JB,
+        JBE,
+        CALL,
+        RET
+    };
 
+    template<class T = int>
     class Parser {
     private:
         file_iterator input_;
+        std::map<CommandNames, std::function<std::shared_ptr<commands::ICommand>(T)>> commands_map {
+                {CommandNames::BEGIN, []() {return std::make_shared<commands::Begin>();}},
+                {CommandNames::END, []() {return std::make_shared<commands::End>();}},
+                {CommandNames::POP, []() {return std::make_shared<commands::Pop>();}},
+                {CommandNames::IN, []() {return std::make_shared<commands::In>();}},
+                {CommandNames::OUT, []() {return std::make_shared<commands::Out>();}},
+                {CommandNames::ADD, []() {return std::make_shared<commands::Add>();}},
+                {CommandNames::SUB, []() {return std::make_shared<commands::Sub>();}},
+                {CommandNames::MUL, []() {return std::make_shared<commands::Mul>();}},
+                {CommandNames::DIV, []() {return std::make_shared<commands::Div>();}},
+                {CommandNames::RET, []() {return std::make_shared<commands::Ret>();}},
+                {CommandNames::PUSH,    [](T arg) {return std::make_shared<commands::Push>(arg);}},
+                {CommandNames::POPR,    [](T arg) {return std::make_shared<commands::Popr>(arg);}},
+                {CommandNames::PUSHR,   [](T arg) {return std::make_shared<commands::Pushr>(arg);}},
+                {CommandNames::JMP,     [](T arg) {return std::make_shared<commands::Jmp>(arg);}},
+                {CommandNames::JEQ,     [](T arg) {return std::make_shared <commands::Jeq>(arg);}},
+                {CommandNames::JNE,     [](T arg) {return std::make_shared<commands::Jne>(arg);}},
+                {CommandNames::JA,      [](T arg) {return std::make_shared<commands::Ja>(arg);}},
+                {CommandNames::JAE,     [](T arg) {return std::make_shared<commands::Jae>(arg);}},
+                {CommandNames::JB,      [](T arg) {return std::make_shared<commands::Jb>(arg);}},
+                {CommandNames::JBE,     [](T arg) {return std::make_shared<commands::Jbe>(arg);}},
+                {CommandNames::CALL,    [](T arg) {return std::make_shared<commands::Call>(arg);}},
+        };
 /*        std::vector<CommandDirector> command_regex_ = {
                 {std::make_shared<CommandFactory<commands::Begin>>(),             std::regex("BEGIN|BEG|begin|beg")},
                 {std::make_shared<CommandFactory<commands::End>>(),               std::regex("END|end")},
